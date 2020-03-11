@@ -1,0 +1,22 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  /* Space */
+  --space-ratio: 1.5;
+  --space-4xs: calc(var(--space-3xs) / var(--space-ratio));
+  --space-3xs: calc(var(--space-2xs) / var(--space-ratio));
+  --space-2xs: calc(var(--space-xs) / var(--space-ratio));
+  --space-xs: calc(var(--space-sm) / var(--space-ratio));
+  --space-sm: calc(var(--space-md) / var(--space-ratio));
+  --space-md: 1rem;
+  --space-lg: calc(var(--space-md) * var(--space-ratio));
+  --space-xl: calc(var(--space-lg) * var(--space-ratio));
+  --space-2xl: calc(var(--space-xl) * var(--space-ratio));
+  --space-3xl: calc(var(--space-2xl) * var(--space-ratio));
+  --space-4xl: calc(var(--space-3xl) * var(--space-ratio));
+
+  /* Typography */
+  --measure: 80ch;
+}
