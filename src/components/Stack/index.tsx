@@ -1,25 +1,16 @@
-import React, { ReactNode, useLayoutEffect, useRef } from 'react'
+import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
+import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
 import createLayoutConfig from '../../utils/createLayoutConfig'
 
 interface Props {
-  /** Recursively apply spacing (for nested stacks) */
-  recursive?: boolean
-  /** Vertical space between child elements */
-  space?: string
-  /** Split after n children */
-  splitAfter?: number
+  horizontal?: boolean
+  /** Space between child elements */
+  gap?: string | number
   children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
-}
-
-const defaultApi = {
-  recursive: false,
-  space: 'var(--space-md)',
-  splitAfter: null,
 }
 
 const name = 'stack'
@@ -29,59 +20,30 @@ const name = 'stack'
  */
 export function Stack(props: Props) {
   const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
     name,
     props,
   })
 
-  const { recursive, space, splitAfter } = api
+  const { horizontal, gap: gapValue } = api
+  const { space } = useTheme()
 
-  const ref = useRef<HTMLElement>(null!)
-
-  if (splitAfter) {
-    useLayoutEffect(() => {
-      if (ref && ref.current) {
-        Array.from(ref.current.children)
-          .filter(child => {
-            return child.tagName !== 'STYLE'
-          })
-          .forEach((child, i, list) => {
-            if (list.length === 1) {
-              child.classList.add('only-child')
-            }
-            if (i + 1 === splitAfter) {
-              child.classList.add('split-after')
-            }
-          })
-      }
-    })
-  }
+  const gap = Number.isInteger(gapValue) ? space[gapValue] : gapValue
 
   return (
     <>
       {createStyleTag`
         ${selector} {
           display: flex;
-          flex-direction: column;
+          flex-direction: ${horizontal ? 'row' : 'column'};
+          min-height: 100%;
           justify-content: flex-start;
         }
     
-        ${selector} ${!recursive ? '>' : ''} *:not(style) ~ *:not(style) {
-          margin-top: ${space};
-        }
-
-        ${selector} > .only-child {
-          height: 100%;
-        }
-
-        ${selector} > .split-after {
-          margin-bottom: auto;
+        ${selector} > *:not(style) ~ *:not(style) {
+          margin-${horizontal ? 'left' : 'top'}: ${gap};
         }
       `}
-      <Tag ref={ref} {...passedProps}>
-        {children}
-      </Tag>
+      <Tag {...passedProps}>{children}</Tag>
     </>
   )
 }
