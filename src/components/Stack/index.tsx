@@ -2,9 +2,12 @@ import React, { ReactNode } from 'react'
 
 import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   horizontal?: boolean
   /** Space between child elements */
   gap?: string | number
@@ -19,15 +22,20 @@ const name = 'stack'
  * Stack layout component
  */
 export function Stack(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    name,
-    props,
-  })
+  const {
+    horizontal = false,
+    gap = 0,
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { horizontal, gap: gapValue } = api
+  const layoutClass = createLayoutClassname(name, { horizontal, gap })
+  const selector = `${Tag}.${layoutClass}`
+
   const { space } = useTheme()
 
-  const gap = Number.isInteger(gapValue) ? space[gapValue] : gapValue
+  const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
 
   return (
     <>
@@ -40,10 +48,10 @@ export function Stack(props: Props) {
         }
     
         ${selector} > *:not(style) ~ *:not(style) {
-          margin-${horizontal ? 'left' : 'top'}: ${gap};
+          margin-${horizontal ? 'left' : 'top'}: ${gapValue};
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }

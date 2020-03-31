@@ -2,11 +2,14 @@ import React, { ReactNode } from 'react'
 
 import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   /** Controls padding all around box */
-  padding?: string | number
+  padding?: number | string
   stretch?: boolean
   size?: string
   children?: ReactNode
@@ -21,23 +24,27 @@ const name = 'box'
  * Box layout component
  */
 export function Box(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    name,
-    props,
-  })
+  const {
+    padding = 0,
+    size = null,
+    stretch = false,
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { padding: paddingValue, stretch, size } = api
+  const layoutClass = createLayoutClassname(name, { padding, size, stretch })
+  const selector = `${Tag}.${layoutClass}`
+
   const { space } = useTheme()
 
-  const padding = Number.isInteger(paddingValue)
-    ? space[paddingValue]
-    : paddingValue
+  const paddingValue: string = isNaN(Number(padding)) ? padding : space(padding)
 
   return (
     <>
       {createStyleTag`
         ${selector} {
-          padding: ${padding};
+          padding: ${paddingValue};
           flex-basis: auto;
           ${
             stretch
@@ -56,7 +63,7 @@ export function Box(props: Props) {
           }
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }

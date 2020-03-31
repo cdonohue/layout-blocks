@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react'
 
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   /** Minimum height to cover */
   height?: string
   children?: ReactNode
@@ -17,12 +20,10 @@ const name = 'cover'
  * Cover layout component
  */
 export function Cover(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    name,
-    props,
-  })
+  const { height = '100vh', as: Tag = 'div', children, ...rest } = props
 
-  const { height } = api
+  const layoutClass = createLayoutClassname(name, { height })
+  const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
@@ -37,7 +38,7 @@ export function Cover(props: Props) {
           min-height: 100%;
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }
