@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react'
 
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
@@ -15,10 +18,10 @@ const name = 'breakout'
  * Breakout layout component
  */
 export function Breakout(props: Props) {
-  const { children, Tag, passedProps, selector } = createLayoutConfig({
-    name,
-    props,
-  })
+  const { children, as: Tag = 'div', ...rest } = props
+
+  const layoutClass = createLayoutClassname(name, {})
+  const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
@@ -29,7 +32,7 @@ export function Breakout(props: Props) {
           transform: translateX(-50%);
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }
