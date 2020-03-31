@@ -1,4 +1,5 @@
 import createHash from './createHash'
+import useApi from './useApi'
 
 export function enhancePropsWithClassname(
   props: { [key: string]: any },
@@ -11,18 +12,13 @@ export function enhancePropsWithClassname(
   }
 }
 
-export function reduceApi(
-  apiFromDefaults: { [key: string]: any },
-  apiFromContext: { [key: string]: any },
-  props: { [key: string]: any }
-) {
-  const apiPrepopulated = {
-    ...apiFromDefaults,
-    ...apiFromContext,
+export function reduceApi(name: string, props: { [key: string]: any }) {
+  const api = {
+    ...useApi(name),
   }
 
   return {
-    ...Object.keys(apiPrepopulated).reduce((apiFinal, key) => {
+    ...Object.keys(api).reduce((apiFinal, key) => {
       if (props.hasOwnProperty(key)) {
         const apiValue = props[key]
         return {
@@ -32,7 +28,7 @@ export function reduceApi(
       }
 
       return apiFinal
-    }, apiPrepopulated),
+    }, api),
   }
 }
 
@@ -51,11 +47,11 @@ type layoutConfigOptsType = {
 }
 
 export default function createLayoutConfig(opts: layoutConfigOptsType) {
-  const { defaultApi, contextApi, name, props } = opts
+  const { name, props } = opts
 
   const { as: Tag = 'div', children, ...remainingProps } = props
 
-  const api = reduceApi(defaultApi, contextApi, remainingProps)
+  const api = reduceApi(name, remainingProps)
 
   Object.keys(api).forEach(key => delete remainingProps[key])
 
