@@ -1,10 +1,12 @@
 import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   /** Controls the max width of the content */
   max?: string
   /** Controls the centering of the text content */
@@ -18,27 +20,29 @@ interface Props {
   as?: keyof JSX.IntrinsicElements
 }
 
-const defaultApi = {
-  max: 'var(--measure)',
-  centerText: false,
-  gutter: '0',
-  intrinsic: false,
-}
-
 const name = 'center'
 
 /**
  * Center layout component
  */
 export function Center(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const {
+    max = '60ch',
+    centerText = false,
+    gutter = 0,
+    intrinsic = false,
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { max, centerText, gutter, intrinsic } = api
+  const layoutClass = createLayoutClassname(name, {
+    max,
+    centerText,
+    gutter,
+    intrinsic,
+  })
+  const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
@@ -62,7 +66,7 @@ export function Center(props: Props) {
           }
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }
