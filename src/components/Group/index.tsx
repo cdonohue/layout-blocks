@@ -1,10 +1,15 @@
 import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
+import useTheme from '../../utils/useTheme'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-interface Props {
+type Props = BoxProps & {
   /** Vertical alignment */
   align?: 'start' | 'center' | 'end' | 'stretch'
   /** Horizontal alignment */
@@ -16,16 +21,10 @@ interface Props {
     | 'space-around'
     | 'space-evenly'
   /** Space value used for gap between children */
-  space?: string
+  gap?: string | number
   children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
-}
-
-const defaultApi = {
-  align: 'center',
-  justify: 'start',
-  space: 'var(--space-md)',
 }
 
 const name = 'group'
@@ -34,14 +33,21 @@ const name = 'group'
  * Group layout component
  */
 export function Group(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const {
+    align = 'center',
+    justify = 'start',
+    gap = '0px',
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { align, justify, space } = api
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
+
+  const { space } = useTheme()
+
+  const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
 
   return (
     <>
@@ -51,6 +57,7 @@ export function Group(props: Props) {
         }
   
         ${selector} > * {
+          ${generateBoxRules(props)}
           display: flex;
           flex-wrap: wrap;
           justify-content: ${
@@ -59,14 +66,14 @@ export function Group(props: Props) {
           align-items: ${
             ['start', 'end'].includes(align) ? `flex-${align}` : align
           };
-          margin: calc(${space} / 2 * -1);
+          margin: calc(${gapValue} / 2 * -1);
         }
   
         ${selector} > * > * {
-          margin: calc(${space} / 2);
+          margin: calc(${gapValue} / 2);
         }
       `}
-      <Tag {...passedProps}>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>
         <div>{children}</div>
       </Tag>
     </>

@@ -6,8 +6,10 @@ import {
   createLayoutClassname,
   enhancePropsWithClassname,
 } from '../../utils/createLayoutConfig'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-type Props = {
+type Props = BoxProps & {
   horizontal?: boolean
   /** Space between child elements */
   gap?: string | number
@@ -27,10 +29,13 @@ export function Stack(props: Props) {
     gap = 0,
     as: Tag = 'div',
     children,
+    size,
+    padding,
+    stretch,
     ...rest
   } = props
 
-  const layoutClass = createLayoutClassname(name, { horizontal, gap })
+  const layoutClass = createLayoutClassname(name, props)
   const selector = `${Tag}.${layoutClass}`
 
   const { space } = useTheme()
@@ -41,9 +46,9 @@ export function Stack(props: Props) {
     <>
       {createStyleTag`
         ${selector} {
+          ${generateBoxRules(props)}
           display: flex;
           flex-direction: ${horizontal ? 'row' : 'column'};
-          min-height: 100%;
           justify-content: flex-start;
         }
     

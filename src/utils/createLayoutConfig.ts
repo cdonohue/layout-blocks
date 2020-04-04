@@ -15,5 +15,7 @@ export function createLayoutClassname(
   name: string,
   props: Record<string, any> = {}
 ) {
-  return `layout-block-${name}-${createHash(JSON.stringify(props))}`
+  // strip children from props
+  const { children, ...rest } = props
+  return `layout-block-${name}-${createHash(JSON.stringify(rest))}`
 }

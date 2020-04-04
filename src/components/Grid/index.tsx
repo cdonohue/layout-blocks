@@ -1,23 +1,23 @@
 import React, { ReactNode, useRef } from 'react'
 
-import useApi from '../../utils/useApi'
 import useResizeObserver from '../../utils/useResizeObserver'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
+import useTheme from '../../utils/useTheme'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-interface Props {
+type Props = BoxProps & {
   /** Minimum width of children */
   min?: string
   /** Space value used for gap between children */
-  space?: string
+  gap?: string | number
   children?: ReactNode
   /** HTML element to render */
   as?: any
-}
-
-const defaultApi = {
-  min: '250px',
-  space: 'var(--space-md)',
 }
 
 const name = 'grid'
@@ -26,14 +26,20 @@ const name = 'grid'
  * Grid layout component
  */
 export function Grid(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const {
+    min = '250px',
+    gap = '0px',
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { min, space } = api
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
+
+  const { space } = useTheme()
+
+  const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
 
   const ref = useRef<HTMLElement>(null!)
   const childRef = useRef<HTMLDivElement>(null!)
@@ -49,6 +55,7 @@ export function Grid(props: Props) {
 
   const containerClass = 'aboveMin'
 
+  const passedProps = enhancePropsWithClassname(rest, layoutClass)
   const { className } = passedProps
 
   const enhancedProps = {
@@ -67,8 +74,9 @@ export function Grid(props: Props) {
     <>
       {createStyleTag`
         ${selector} {
+          ${generateBoxRules(props)}
           display: grid;
-          grid-gap: ${space};
+          grid-gap: ${gapValue};
           grid-template-columns: 100%;
         }
   

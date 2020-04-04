@@ -5,8 +5,10 @@ import {
   createLayoutClassname,
   enhancePropsWithClassname,
 } from '../../utils/createLayoutConfig'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-type Props = {
+type Props = BoxProps & {
   /** Minimum height to cover */
   height?: string
   children?: ReactNode
@@ -22,13 +24,14 @@ const name = 'cover'
 export function Cover(props: Props) {
   const { height = '100vh', as: Tag = 'div', children, ...rest } = props
 
-  const layoutClass = createLayoutClassname(name, { height })
+  const layoutClass = createLayoutClassname(name, props)
   const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
       {createStyleTag`
-        ${selector} {
+        ${selector} {       
+          ${generateBoxRules(props)}
           display: flex;
           flex-direction: column;
           height: ${height};

@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react'
 
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-interface Props {
+type Props = {
   children?: ReactNode
   as?: keyof JSX.IntrinsicElements
 }
@@ -14,10 +17,10 @@ const name = 'spacer'
  * Spacer layout component
  */
 export function Spacer(props: Props) {
-  const { children, Tag, passedProps, selector } = createLayoutConfig({
-    name,
-    props,
-  })
+  const { children, as: Tag = 'div', ...rest } = props
+
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
@@ -26,7 +29,7 @@ export function Spacer(props: Props) {
           flex: 1 1 auto;
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }

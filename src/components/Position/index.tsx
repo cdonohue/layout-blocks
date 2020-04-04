@@ -1,12 +1,17 @@
 import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
+import useTheme from '../../utils/useTheme'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-interface Props {
+type Props = BoxProps & {
   /** Space to offset from the edge of the containing element */
-  margin?: string
+  gutter?: string
   /** Let the element flow outside of the containing element */
   breakout?: boolean
   /** Contain the element to the viewport (instead of the document) */
@@ -18,14 +23,6 @@ interface Props {
   children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
-}
-
-const defaultApi = {
-  breakout: false,
-  margin: 'var(--space-md)',
-  fixed: false,
-  x: 'center',
-  y: 'center',
 }
 
 function generatePinningRules(x: string, y: string, margin: string) {
@@ -94,26 +91,36 @@ const name = 'position'
  * Position layout component
  */
 export function Position(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const {
+    breakout = false,
+    gutter = 'var(--space-md)',
+    fixed = false,
+    x = 'center',
+    y = 'center',
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { breakout, margin, fixed, x, y } = api
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
+
+  const { space } = useTheme()
+
+  const gutterValue: string = isNaN(Number(gutter)) ? gutter : space(gutter)
 
   return (
     <>
       {createStyleTag`
         ${selector} {
+          ${generateBoxRules(props)}
           position: absolute;
-          ${generatePinningRules(x, y, margin)}
+          ${generatePinningRules(x, y, gutterValue)}
           ${
             !breakout
               ? `
-            max-width: calc(100% - (${margin} * 2));
-            max-height: calc(100% - (${margin} * 2));
+            max-width: calc(100% - (${gutterValue} * 2));
+            max-height: calc(100% - (${gutterValue} * 2));
             overflow: auto;`
               : ''
           }
@@ -125,7 +132,7 @@ export function Position(props: Props) {
           }
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }

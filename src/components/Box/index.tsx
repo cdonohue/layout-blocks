@@ -7,7 +7,7 @@ import {
   enhancePropsWithClassname,
 } from '../../utils/createLayoutConfig'
 
-type Props = {
+export type BoxProps = {
   /** Controls padding all around box */
   padding?: number | string
   stretch?: boolean
@@ -18,14 +18,41 @@ type Props = {
   className?: string
 }
 
+export function generateBoxRules(props: BoxProps) {
+  const { padding = null, stretch = false, size = '' } = props
+  const { space } = useTheme()
+
+  const paddingValue: string = isNaN(Number(padding)) ? padding : space(padding)
+
+  return `
+    position: relative;
+    ${padding ? `padding: ${paddingValue};` : ''}
+    ${
+      stretch
+        ? `
+      flex-grow: 999;
+      flex-basis: 0;
+    `
+        : ''
+    }
+    ${
+      size
+        ? `
+      flex-basis: ${size};
+    `
+        : ''
+    }
+  `
+}
+
 const name = 'box'
 
 /**
  * Box layout component
  */
-export function Box(props: Props) {
+export function Box(props: BoxProps) {
   const {
-    padding = 0,
+    padding = null,
     size = null,
     stretch = false,
     as: Tag = 'div',
@@ -33,34 +60,14 @@ export function Box(props: Props) {
     ...rest
   } = props
 
-  const layoutClass = createLayoutClassname(name, { padding, size, stretch })
+  const layoutClass = createLayoutClassname(name, props)
   const selector = `${Tag}.${layoutClass}`
-
-  const { space } = useTheme()
-
-  const paddingValue: string = isNaN(Number(padding)) ? padding : space(padding)
 
   return (
     <>
       {createStyleTag`
         ${selector} {
-          padding: ${paddingValue};
-          flex-basis: auto;
-          ${
-            stretch
-              ? `
-            flex-grow: 999;
-            flex-basis: 0;
-          `
-              : ''
-          }
-          ${
-            size
-              ? `
-            flex-basis: ${size};
-          `
-              : ''
-          }
+          ${generateBoxRules(props)}
         }
       `}
       <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>

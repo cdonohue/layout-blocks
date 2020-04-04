@@ -1,22 +1,21 @@
 import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
+import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-interface Props {
+type Props = BoxProps & {
   /** Controls padding all around box */
-  space?: string
+  gap?: string | number
   threshold?: string
   limit?: number
   children?: ReactNode
   as?: keyof JSX.IntrinsicElements
-}
-
-const defaultApi = {
-  threshold: 'var(--measure)',
-  space: 'var(--space-md)',
-  limit: 4,
 }
 
 const name = 'switcher'
@@ -25,38 +24,57 @@ const name = 'switcher'
  * Switcher layout component
  */
 export function Switcher(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const {
+    threshold = '67ch',
+    gap = '0px',
+    limit = 4,
+    as: Tag = 'div',
+    children,
+    ...rest
+  } = props
 
-  const { threshold, space, limit } = api
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
+
+  const { space } = useTheme()
+
+  const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
 
   return (
     <>
       {createStyleTag`
         ${selector} > * {
+          ${generateBoxRules(props)}
           display: flex;
           flex-wrap: wrap;
-          margin: calc((${space} / 2) * -1);
+          margin: calc((${gapValue} / 2) * -1);
         }
   
         ${selector} > * > * {
           flex-grow: 1;
-          flex-basis: calc((${threshold} - (100% - ${space})) * 999);
-          margin: calc(${space} / 2);
+          flex-basis: calc((${threshold} - (100% - ${gapValue})) * 999);
+          margin: calc(${gapValue} / 2);
         }
   
-        ${selector} > * > :nth-last-of-type(n+${Number(limit) + 1}):not(style),
-        ${selector} > * > :nth-last-of-type(n+${Number(limit) +
-        1}):not(style) ~ *:not(style) {
+        ${selector} > * > .${layoutClass}-overflow {
           flex-basis: 100%;
         }
       `}
-      <Tag {...passedProps}>
-        <div>{children}</div>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>
+        <div>
+          {React.Children.map(children, (child, i) => {
+            if (React.isValidElement(child)) {
+              const { className = '' } = child.props
+              return React.cloneElement(child, {
+                className:
+                  i >= limit
+                    ? `${className} ${layoutClass}-overflow`
+                    : className,
+              })
+            }
+            return child
+          })}
+        </div>
       </Tag>
     </>
   )

@@ -1,19 +1,19 @@
 import React, { ReactNode } from 'react'
 
-import useApi from '../../utils/useApi'
 import createStyleTag from '../../utils/createStyleTag'
-import createLayoutConfig from '../../utils/createLayoutConfig'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-interface Props {
+type Props = BoxProps & {
   /** Aspect ratio of element (Form of <width>:<height>) */
   ratio?: string
   children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
-}
-
-const defaultApi = {
-  ratio: '16:9',
 }
 
 const name = 'frame'
@@ -22,14 +22,10 @@ const name = 'frame'
  * Frame layout component
  */
 export function Frame(props: Props) {
-  const { api, children, Tag, passedProps, selector } = createLayoutConfig({
-    contextApi: useApi(name),
-    defaultApi,
-    name,
-    props,
-  })
+  const { ratio = '16:9', as: Tag = 'div', children, ...rest } = props
 
-  const { ratio } = api
+  const layoutClass = createLayoutClassname(name, props)
+  const selector = `${Tag}.${layoutClass}`
 
   const [denominator, numerator] = ratio.split(':')
 
@@ -37,6 +33,7 @@ export function Frame(props: Props) {
     <>
       {createStyleTag`
         ${selector} {
+          ${generateBoxRules(props)}
           padding-bottom: calc(${Number(numerator)} / ${Number(
         denominator
       )} * 100%);
@@ -62,7 +59,7 @@ export function Frame(props: Props) {
           object-fit: cover;
         }
       `}
-      <Tag {...passedProps}>{children}</Tag>
+      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
     </>
   )
 }

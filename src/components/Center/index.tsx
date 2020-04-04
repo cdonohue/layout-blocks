@@ -1,23 +1,23 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import createStyleTag from '../../utils/createStyleTag'
 import {
   createLayoutClassname,
   enhancePropsWithClassname,
 } from '../../utils/createLayoutConfig'
+import useTheme from '../../utils/useTheme'
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
 
-type Props = {
+type Props = BoxProps & {
   /** Controls the max width of the content */
   max?: string
   /** Controls the centering of the text content */
   centerText?: boolean
   /** Left/right margin to leave when container width is the same as content width */
-  gutter?: string
+  gutter?: string | number
   /** Intrinsically center the children (layout using flex) */
   intrinsic?: boolean
-  children?: ReactNode
-  /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
 }
 
 const name = 'center'
@@ -29,32 +29,38 @@ export function Center(props: Props) {
   const {
     max = '60ch',
     centerText = false,
-    gutter = 0,
+    gutter = null,
     intrinsic = false,
     as: Tag = 'div',
     children,
     ...rest
   } = props
 
-  const layoutClass = createLayoutClassname(name, {
-    max,
-    centerText,
-    gutter,
-    intrinsic,
-  })
+  const layoutClass = createLayoutClassname(name, props)
   const selector = `${Tag}.${layoutClass}`
+
+  const { space } = useTheme()
+
+  const gutterValue: string = isNaN(Number(gutter)) ? gutter : space(gutter)
 
   return (
     <>
       {createStyleTag`
         ${selector} {
+          ${generateBoxRules(props)}
           box-sizing: content-box;
           margin-left: auto;
           margin-right: auto;
           max-width: ${max};
           ${centerText ? 'text-align: center;' : ''}
-          padding-left: ${gutter};
-          padding-right: ${gutter};
+          ${
+            gutter
+              ? `
+            padding-left: ${gutterValue};
+            padding-right: ${gutterValue};
+          `
+              : ''
+          }
           ${
             intrinsic
               ? `
