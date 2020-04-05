@@ -65,18 +65,16 @@ export const blank = () => {
             <Box className="p-2 text-center text-gray-300" padding={0}>
               Welcome to layout-blocks
             </Box>
-            <Box padding={2}>
-              <Group gap={2}>
-                <button>&lt;</button>
-                <button>&gt;</button>
-                <Box
-                  as="input"
-                  stretch
-                  className="bg-gray-700 text-gray-100 px-1 py-px"
-                  value="http://localhost:3000/"
-                />
-              </Group>
-            </Box>
+            <Group gap={2} padding={2}>
+              <button>&lt;</button>
+              <button>&gt;</button>
+              <Box
+                as="input"
+                stretch
+                className="bg-gray-700 text-gray-100 px-1 py-px"
+                value="http://localhost:3000/"
+              />
+            </Group>
             <Box className="bg-white text-center p-8" padding={0} stretch>
               <h1 className="text-black text-4xl">Welcome to Layout Blocks!</h1>
             </Box>

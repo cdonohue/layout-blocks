@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import createStyleTag from '../../utils/createStyleTag'
 import {
@@ -11,7 +11,7 @@ import { generateBoxRules } from '../Box'
 
 type Props = BoxProps & {
   /** Space to offset from the edge of the containing element */
-  gutter?: string
+  gutter?: string | number
   /** Let the element flow outside of the containing element */
   breakout?: boolean
   /** Contain the element to the viewport (instead of the document) */
@@ -20,7 +20,6 @@ type Props = BoxProps & {
   x?: 'left' | 'center' | 'right' | 'full'
   /** Positioning along y-axis */
   y?: 'top' | 'center' | 'bottom' | 'full'
-  children?: ReactNode
   /** HTML element to render */
   as?: keyof JSX.IntrinsicElements
 }
@@ -93,7 +92,7 @@ const name = 'position'
 export function Position(props: Props) {
   const {
     breakout = false,
-    gutter = 'var(--space-md)',
+    gutter = '0px',
     fixed = false,
     x = 'center',
     y = 'center',

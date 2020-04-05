@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
@@ -13,9 +13,6 @@ type Props = BoxProps & {
   horizontal?: boolean
   /** Space between child elements */
   gap?: string | number
-  children?: ReactNode
-  /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
 }
 
 const name = 'stack'
@@ -26,12 +23,9 @@ const name = 'stack'
 export function Stack(props: Props) {
   const {
     horizontal = false,
-    gap = 0,
+    gap = '0px',
     as: Tag = 'div',
     children,
-    size,
-    padding,
-    stretch,
     ...rest
   } = props
 

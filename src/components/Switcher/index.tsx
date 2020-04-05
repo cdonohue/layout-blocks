@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import useTheme from '../../utils/useTheme'
 import createStyleTag from '../../utils/createStyleTag'
@@ -14,8 +14,6 @@ type Props = BoxProps & {
   gap?: string | number
   threshold?: string
   limit?: number
-  children?: ReactNode
-  as?: keyof JSX.IntrinsicElements
 }
 
 const name = 'switcher'
