@@ -55,16 +55,14 @@ export const HorizontalNegativeMargin = () => {
 
 export const CoverWithAStack = () => {
   return (
-    <Cover className="bg-gray-700">
-      <Box>
-        <Stack>
-          <Box className="bg-gray-200 shadow-xl">One</Box>
-          <Box stretch className="bg-gray-400 shadow-xl">
-            Two
-          </Box>
-          <Box className="bg-gray-600 text-gray-100 shadow-xl">Three</Box>
-        </Stack>
-      </Box>
+    <Cover className="bg-gray-700" padding={4}>
+      <Stack gap={4}>
+        <Box className="bg-gray-200 shadow-xl">One</Box>
+        <Box stretch className="bg-gray-400 shadow-xl">
+          Two
+        </Box>
+        <Box className="bg-gray-600 text-gray-100 shadow-xl">Three</Box>
+      </Stack>
     </Cover>
   )
 }
@@ -81,11 +79,9 @@ export const ComplexNestedStacks = () => {
             Main
           </Box>
           <Box padding="1rem" size="20rem" className="bg-gray-600 shadow-xl">
-            <Stack space="1rem">
-              <Box padding="1rem" className="bg-gray-100">
-                Three
-              </Box>
-              <Box padding="1rem" stretch className="bg-gray-100">
+            <Stack>
+              <Box className="bg-gray-100">Three</Box>
+              <Box stretch className="bg-gray-100">
                 Four
               </Box>
             </Stack>

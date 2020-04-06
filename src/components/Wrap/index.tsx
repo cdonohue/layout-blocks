@@ -51,7 +51,7 @@ export function Wrap(props: Props) {
 
   let isWide = false
 
-  // Add a test element to compare the min value to the container
+  // Add a test element to compare the calculated width to the threshold
   if (childRef.current) {
     childRef.current.style.width = threshold
     isWide = width > childRef.current.offsetWidth
