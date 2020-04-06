@@ -19,6 +19,7 @@ type Props = BoxProps & {
   gap?: string | number
   /** Stretch sidebar to match content (and vice versa) */
   stretch?: boolean
+  as?: any
 }
 
 const name = 'sidebar'
