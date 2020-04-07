@@ -15,8 +15,18 @@ export const PlainBox = () => {
 
 export const PaddedBox = () => {
   return (
-    <Box className="bg-gray-200" padding="24px">
-      I have <code>24px</code> of padding
+    <Box bgColor="gray.900" padding="24px">
+      <Box
+        bgColor="gray.500"
+        padding={4}
+        styles={selector => `
+          ${selector} {
+            border-radius: 8px;
+          }
+        `}
+      >
+        I'm a box inside of another box
+      </Box>
     </Box>
   )
 }
