@@ -1,13 +1,10 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 
-import { Cover, Box, Spacer, Stack, Group } from '../'
+import { Cover, Box, Spacer, Stack, Group, Row, Column } from '../'
 
 export default {
   title: 'Examples/CodeSandbox',
 }
-
-const Row: FunctionComponent = (props) => <Stack horizontal {...props} />
-const Column: FunctionComponent = (props) => <Stack {...props} />
 
 export const blank = () => {
   return (

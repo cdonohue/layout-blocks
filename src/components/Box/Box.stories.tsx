@@ -15,9 +15,8 @@ export const PlainBox = () => {
 
 export const PaddedBox = () => {
   return (
-    <Box bgColor="gray.900" padding="24px">
+    <Box padding="24px">
       <Box
-        bgColor="gray.500"
         padding={4}
         styles={selector => `
           ${selector} {

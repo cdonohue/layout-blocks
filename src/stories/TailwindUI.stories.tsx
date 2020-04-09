@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useRef, MutableRefObject } from 'react'
+import useBreakpoint from '../utils/useBreakpoint'
 
-import { Cover, Box, Center, Spacer, Stack, Group } from '../'
+import { Cover, Box, Center, Spacer, Stack, Group, Switch } from '../'
 
 export default {
   title: 'Examples/TailwindUI',
@@ -68,3 +69,38 @@ export const HeroSection = () => (
     </Stack>
   </Stack>
 )
+
+export const CtaSection = () => {
+  const ref = useRef<HTMLElement>(null!)
+  const [isMd, isLg] = useBreakpoint(['640px', '1024px'], ref)
+
+  return (
+    <Stack
+      {...{
+        inline: isLg,
+        justify: isLg ? 'space-between' : 'start',
+        align: isLg ? 'center' : 'start',
+      }}
+      paddingY={12}
+      paddingX={4}
+      ref={ref}
+      className="bg-gray-100"
+    >
+      <Box padding={4}>
+        <h2 className="font-extrabold tracking-tight text-gray-900 text-4xl leading-10">
+          Ready to dive in?
+          <br />
+          <span className="text-indigo-600">Start your free trial today.</span>
+        </h2>
+      </Box>
+      <Group gap={4} padding={4}>
+        <Link className="shadow-md px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500">
+          Get Started
+        </Link>
+        <Link className="shadow-md px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white">
+          Learn More
+        </Link>
+      </Group>
+    </Stack>
+  )
+}

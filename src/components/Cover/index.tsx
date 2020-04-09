@@ -1,37 +1,31 @@
 import React, { ReactNode } from 'react'
 
-import createStyleTag from '../../utils/createStyleTag'
-import {
-  createLayoutClassname,
-  enhancePropsWithClassname,
-} from '../../utils/createLayoutConfig'
-import type { BoxProps } from '../Box'
-import { generateBoxRules } from '../Box'
+import { Box, BoxProps } from '../Box'
 
 type Props = BoxProps & {
   /** Minimum height to cover */
   height?: string
   children?: ReactNode
-  /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
 }
-
-const name = 'cover'
 
 /**
  * Cover layout component
  */
 export function Cover(props: Props) {
-  const { height = '100vh', as: Tag = 'div', children, ...rest } = props
-
-  const layoutClass = createLayoutClassname(name, props)
-  const selector = `${Tag}.${layoutClass}`
+  const {
+    height = '100vh',
+    children,
+    layoutName = 'cover',
+    styles: localStyles = () => '',
+    ...rest
+  } = props
 
   return (
-    <>
-      {createStyleTag`
+    <Box
+      {...rest}
+      layoutName="cover"
+      styles={(selector, theme) => `
         ${selector} {       
-          ${generateBoxRules(props)}
           display: flex;
           flex-direction: column;
           height: ${height};
@@ -40,8 +34,10 @@ export function Cover(props: Props) {
         ${selector} > * {
           min-height: 100%;
         }
+        ${localStyles(selector, theme)}
       `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
-    </>
+    >
+      {children}
+    </Box>
   )
 }

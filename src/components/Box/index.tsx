@@ -12,18 +12,20 @@ export type BoxProps = {
   bgColor?: string
   /** Controls padding all around box */
   padding?: number | string
-  'padding-x'?: number | string
-  'padding-y'?: number | string
-  'padding-top'?: number | string
-  'padding-right'?: number | string
-  'padding-bottom'?: number | string
-  'padding-left'?: number | string
+  paddingX?: number | string
+  paddingY?: number | string
+  paddingTop?: number | string
+  paddingRight?: number | string
+  paddingBottom?: number | string
+  paddingLeft?: number | string
+  layoutName?: string
   stretch?: boolean
   size?: string
   styles?: (selector?: string, theme?: Record<string, any>) => string
   children?: ReactNode
   /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
+  as?: any
+  ref?: any
   className?: string
 }
 
@@ -54,12 +56,12 @@ export function generateBoxRules(props: BoxProps) {
     bgColor = null,
     fgColor = null,
     padding = null,
-    'padding-x': paddingX = null,
-    'padding-y': paddingY = null,
-    'padding-top': paddingTop = null,
-    'padding-right': paddingRight = null,
-    'padding-bottom': paddingBottom = null,
-    'padding-left': paddingLeft = null,
+    paddingX = null,
+    paddingY = null,
+    paddingTop = null,
+    paddingRight = null,
+    paddingBottom = null,
+    paddingLeft = null,
     stretch = false,
     size = '',
   } = props
@@ -115,34 +117,35 @@ export function generateBoxRules(props: BoxProps) {
   `
 }
 
-const name = 'box'
-
 /**
  * Box layout component
  */
-export function Box(props: BoxProps) {
+export const Box = React.forwardRef((props: BoxProps, ref) => {
   const {
     padding = null,
     size = null,
     stretch = false,
     as: Tag = 'div',
     styles = () => '',
+    layoutName = 'box',
     children,
     ...rest
   } = props
 
-  const layoutClass = createLayoutClassname(name, props)
+  const layoutClass = createLayoutClassname(layoutName, props)
   const selector = `${Tag}.${layoutClass}`
 
   return (
     <>
       {createStyleTag`
-        ${selector} {
-          ${generateBoxRules(props)}
-        }
-        ${styles(selector, useTheme())}
-      `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
+          ${selector} {
+            ${generateBoxRules(props)}
+          }
+          ${styles(selector, useTheme())}
+        `}
+      <Tag {...enhancePropsWithClassname({ ...rest, ref }, layoutClass)}>
+        {children}
+      </Tag>
     </>
   )
-}
+})

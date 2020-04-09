@@ -1,13 +1,7 @@
 import React, { ReactNode } from 'react'
 
-import createStyleTag from '../../utils/createStyleTag'
-import {
-  createLayoutClassname,
-  enhancePropsWithClassname,
-} from '../../utils/createLayoutConfig'
 import useTheme from '../../utils/useTheme'
-import type { BoxProps } from '../Box'
-import { generateBoxRules } from '../Box'
+import { Box, BoxProps } from '../Box'
 
 type Props = BoxProps & {
   /** Vertical alignment */
@@ -23,11 +17,7 @@ type Props = BoxProps & {
   /** Space value used for gap between children */
   gap?: string | number
   children?: ReactNode
-  /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
 }
-
-const name = 'group'
 
 /**
  * Group layout component
@@ -37,27 +27,25 @@ export function Group(props: Props) {
     align = 'center',
     justify = 'start',
     gap = '0px',
-    as: Tag = 'div',
+    layoutName = 'group',
+    styles: localStyles = () => '',
     children,
     ...rest
   } = props
-
-  const layoutClass = createLayoutClassname(name, props)
-  const selector = `${Tag}.${layoutClass}`
 
   const { space } = useTheme()
 
   const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
 
   return (
-    <>
-      {createStyleTag`
+    <Box
+      {...{ ...rest, layoutName }}
+      styles={(selector, theme) => `
         ${selector} {
           overflow: hidden;
         }
   
         ${selector} > * {
-          ${generateBoxRules(props)}
           display: flex;
           flex-wrap: wrap;
           justify-content: ${
@@ -72,10 +60,10 @@ export function Group(props: Props) {
         ${selector} > * > * {
           margin: calc(${gapValue} / 2);
         }
+        ${localStyles(selector, theme)}
       `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>
-        <div>{children}</div>
-      </Tag>
-    </>
+    >
+      <div>{children}</div>
+    </Box>
   )
 }

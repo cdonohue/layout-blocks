@@ -1,13 +1,7 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-import createStyleTag from '../../utils/createStyleTag'
-import {
-  createLayoutClassname,
-  enhancePropsWithClassname,
-} from '../../utils/createLayoutConfig'
 import useTheme from '../../utils/useTheme'
-import type { BoxProps } from '../Box'
-import { generateBoxRules } from '../Box'
+import { Box, BoxProps } from '../Box'
 
 type Props = BoxProps & {
   /** Controls the max width of the content */
@@ -18,9 +12,8 @@ type Props = BoxProps & {
   gutter?: string | number
   /** Intrinsically center the children (layout using flex) */
   intrinsic?: boolean
+  children?: ReactNode
 }
-
-const name = 'center'
 
 /**
  * Center layout component
@@ -31,23 +24,21 @@ export function Center(props: Props) {
     centerText = false,
     gutter = null,
     intrinsic = false,
-    as: Tag = 'div',
+    layoutName = 'center',
+    styles: localStyles = () => '',
     children,
     ...rest
   } = props
-
-  const layoutClass = createLayoutClassname(name, props)
-  const selector = `${Tag}.${layoutClass}`
 
   const { space } = useTheme()
 
   const gutterValue: string = isNaN(Number(gutter)) ? gutter : space(gutter)
 
   return (
-    <>
-      {createStyleTag`
+    <Box
+      {...{ ...rest, layoutName }}
+      styles={(selector, theme) => `
         ${selector} {
-          ${generateBoxRules(props)}
           box-sizing: content-box;
           margin-left: auto;
           margin-right: auto;
@@ -71,8 +62,10 @@ export function Center(props: Props) {
               : ''
           }
         }
+        ${localStyles(selector, theme)}
       `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
-    </>
+    >
+      {children}
+    </Box>
   )
 }

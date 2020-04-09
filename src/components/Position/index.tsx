@@ -1,13 +1,7 @@
 import React from 'react'
 
-import createStyleTag from '../../utils/createStyleTag'
-import {
-  createLayoutClassname,
-  enhancePropsWithClassname,
-} from '../../utils/createLayoutConfig'
 import useTheme from '../../utils/useTheme'
-import type { BoxProps } from '../Box'
-import { generateBoxRules } from '../Box'
+import { Box, BoxProps } from '../Box'
 
 type Props = BoxProps & {
   /** Space to offset from the edge of the containing element */
@@ -84,8 +78,6 @@ function generateYPinningRules(y: string, margin: string) {
     `
 }
 
-const name = 'position'
-
 /**
  * Position layout component
  */
@@ -96,23 +88,21 @@ export function Position(props: Props) {
     fixed = false,
     x = 'center',
     y = 'center',
-    as: Tag = 'div',
+    layoutName = 'position',
+    styles: localStyles = () => '',
     children,
     ...rest
   } = props
-
-  const layoutClass = createLayoutClassname(name, props)
-  const selector = `${Tag}.${layoutClass}`
 
   const { space } = useTheme()
 
   const gutterValue: string = isNaN(Number(gutter)) ? gutter : space(gutter)
 
   return (
-    <>
-      {createStyleTag`
+    <Box
+      {...{ ...rest, layoutName }}
+      styles={(selector, theme) => `
         ${selector} {
-          ${generateBoxRules(props)}
           position: absolute;
           ${generatePinningRules(x, y, gutterValue)}
           ${
@@ -130,8 +120,10 @@ export function Position(props: Props) {
               : ''
           }
         }
+        ${localStyles(selector, theme)}
       `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
-    </>
+    >
+      {children}
+    </Box>
   )
 }

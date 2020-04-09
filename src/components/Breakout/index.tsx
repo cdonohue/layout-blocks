@@ -1,35 +1,31 @@
 import React from 'react'
 
-import type { BoxProps } from '../Box'
-import { generateBoxRules } from '../Box'
-import createStyleTag from '../../utils/createStyleTag'
-import {
-  createLayoutClassname,
-  enhancePropsWithClassname,
-} from '../../utils/createLayoutConfig'
-
-const name = 'breakout'
+import { Box, BoxProps } from '../Box'
 
 /**
  * Breakout layout component
  */
 export function Breakout(props: BoxProps) {
-  const { children, as: Tag = 'div', ...rest } = props
-
-  const layoutClass = createLayoutClassname(name, props)
-  const selector = `${Tag}.${layoutClass}`
+  const {
+    children,
+    layoutName = 'breakout',
+    styles: localStyles = () => '',
+    ...rest
+  } = props
 
   return (
-    <>
-      {createStyleTag`
+    <Box
+      {...{ ...rest, layoutName }}
+      styles={(selector, theme) => `
         ${selector} {
-          ${generateBoxRules(props)}
           width: 100vw;
           margin-left: 50%;
           transform: translateX(-50%);
         }
+        ${localStyles(selector, theme)}
       `}
-      <Tag {...enhancePropsWithClassname(rest, layoutClass)}>{children}</Tag>
-    </>
+    >
+      {children}
+    </Box>
   )
 }

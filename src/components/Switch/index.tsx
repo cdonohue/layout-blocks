@@ -1,59 +1,68 @@
-import React, { useRef, ReactNode } from 'react'
+import React, { useRef } from 'react'
 
 import useResizeObserver from '../../utils/useResizeObserver'
+import createStyleTag from '../../utils/createStyleTag'
+import {
+  createLayoutClassname,
+  enhancePropsWithClassname,
+} from '../../utils/createLayoutConfig'
 
-type Props = {
-  /** Minimum width of children */
+import type { BoxProps } from '../Box'
+import { generateBoxRules } from '../Box'
+
+type Props = BoxProps & {
   breakpoints?: Record<string, any>
-  children?: ReactNode
-  /** HTML element to render */
   as?: any
-}
-
-function createBreakpointRefs(breakpoints: Record<string, string>) {
-  const refMap: Record<number, string> = {}
-
-  const breakpointRefs = Object.keys(breakpoints).map(breakpoint => {
-    const ref = useRef<HTMLDivElement>(null!)
-
-    if (ref.current) {
-      ref.current.style.width = breakpoint
-      refMap[ref.current.offsetWidth] = breakpoint
-    }
-
-    return ref
-  })
-
-  return { refMap, breakpointRefs }
 }
 
 /**
  * Switch layout component
  */
 export function Switch(props: Props) {
-  const { breakpoints = {}, children, as: Tag = 'div' } = props
+  const { breakpoints = {}, as:Tag = 'div', children, ...rest } = props
 
+  const layoutClass = createLayoutClassname('switch', {})
+  const selector = `${Tag}.${layoutClass}`
+
+  const referenceEl = useRef<HTMLDivElement>(null!)
+
+  const breakpointMap: Record<number, string> = {}
+
+  if (referenceEl.current) {
+    Object.keys(breakpoints).forEach(breakpoint => {     
+      referenceEl.current.style.width = breakpoint
+      breakpointMap[referenceEl.current.offsetWidth] = breakpoint
+    })
+  }
+  
   const ref = useRef<HTMLElement>(null!)
-  const { refMap, breakpointRefs } = createBreakpointRefs(breakpoints)
   const { width } = useResizeObserver({ ref })
 
-  const breakpointToRender = Math.max(
-    ...Object.keys(refMap)
+  const breakpointToRender: number | null = Math.max(
+    ...Object.keys(breakpointMap)
       .map(Number)
       .sort()
       .filter(breakPointWidth => width > breakPointWidth)
   )
 
+  const finalProps = {
+    ...rest,
+    ref
+  }
+
   return (
     <>
-      <Tag ref={ref}>
-        {isFinite(breakpointToRender)
-          ? breakpoints[refMap[breakpointToRender]]
-          : children}
-        {breakpointRefs.map((ref, i) => (
-          <div key={i} ref={ref} />
-        ))}
+      {createStyleTag`
+        ${selector} {
+          ${generateBoxRules(props)}
+        }
+      `}
+      <Tag {...enhancePropsWithClassname(finalProps, layoutClass)}>
+        {breakpointToRender && isFinite(breakpointToRender)
+          ? breakpoints[breakpointMap[breakpointToRender]]
+          : children}       
       </Tag>
+      <div style={{position:'absolute'}} ref={referenceEl} />
     </>
   )
 }
