@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useRef, MutableRefObject } from 'react'
-import useBreakpoint from '../utils/useBreakpoint'
+import useContainerWidth from '../utils/useContainerWidth'
 
 import { Cover, Box, Center, Spacer, Stack, Group, Switch } from '../'
 
@@ -7,7 +7,7 @@ export default {
   title: 'Examples/TailwindUI',
 }
 
-const Row: FunctionComponent = props => <Stack horizontal {...props} />
+const Row: FunctionComponent = props => <Stack inline {...props} />
 const Column: FunctionComponent = props => <Stack {...props} />
 const Link: FunctionComponent = props => <Box as="a" {...props} />
 
@@ -71,8 +71,7 @@ export const HeroSection = () => (
 )
 
 export const CtaSection = () => {
-  const ref = useRef<HTMLElement>(null!)
-  const [isMd, isLg] = useBreakpoint(['640px', '1024px'], ref)
+  const [ref, isLg] = useContainerWidth('1024px')
 
   return (
     <Stack
@@ -84,7 +83,7 @@ export const CtaSection = () => {
       paddingY={12}
       paddingX={4}
       ref={ref}
-      className="bg-gray-100"
+      className="bg-gray-100 font-sans"
     >
       <Box padding={4}>
         <h2 className="font-extrabold tracking-tight text-gray-900 text-4xl leading-10">
@@ -93,14 +92,47 @@ export const CtaSection = () => {
           <span className="text-indigo-600">Start your free trial today.</span>
         </h2>
       </Box>
-      <Group gap={4} padding={4}>
-        <Link className="shadow-md px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500">
+      <Group gap={4} padding={4} width="100%">
+        <Link
+          className="shadow-md border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500"
+          paddingX={5}
+          paddingY={3}
+          size="100%"
+        >
           Get Started
         </Link>
-        <Link className="shadow-md px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white">
+        <Link
+          className="shadow-md border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white"
+          paddingX={5}
+          paddingY={3}
+          size="100%"
+        >
           Learn More
         </Link>
       </Group>
     </Stack>
+  )
+}
+
+export const StackedAvatars = () => {
+  return (
+    <Group gap={-4}>
+      <img
+        className="border-4 border-white rounded-full h-24 w-24"
+        src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+      />
+      <img
+        className="border-4 border-white rounded-full h-24 w-24"
+        src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+      />
+      <img
+        className="border-4 border-white rounded-full h-24 w-24"
+        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+      />
+      <img
+        className="border-4 border-white rounded-full h-24 w-24"
+        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+      />
+    </Group>
   )
 }
