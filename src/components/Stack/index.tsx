@@ -1,4 +1,4 @@
-import React, { FunctionComponent, forwardRef } from 'react'
+import React, { forwardRef, FunctionComponent } from 'react'
 
 import useTheme from '../../utils/useTheme'
 import { Box, BoxProps } from '../Box'
@@ -24,13 +24,12 @@ type Props = BoxProps & {
 export const Stack = forwardRef((props: Props, ref) => {
   const {
     inline = false,
-    align = 'start',
+    align = 'stretch',
     justify = 'start',
     gap = '0px',
     layoutName = 'stack',
     styles: localStyles = () => '',
     children,
-    ...rest
   } = props
 
   const { space } = useTheme()
@@ -39,7 +38,7 @@ export const Stack = forwardRef((props: Props, ref) => {
 
   return (
     <Box
-      {...{ ...rest, layoutName, ref }}
+      {...{ ...props, layoutName, ref }}
       styles={(selector, theme) => `
         ${selector} {
           display: flex;

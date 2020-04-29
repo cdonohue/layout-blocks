@@ -4,6 +4,8 @@ import { Box, BoxProps } from '../Box'
 type Props = BoxProps & {
   /** Aspect ratio of element (Form of <width>:<height>) */
   ratio?: string
+  width?: string
+  overlay?: string
   children?: ReactNode
 }
 
@@ -14,22 +16,39 @@ export function Frame(props: Props) {
   const {
     ratio = '16:9',
     layoutName = 'frame',
+    overlay = null,
     styles: localStyles = () => '',
+    width = '100%',
     children,
-    ...rest
   } = props
 
   const [denominator, numerator] = ratio.split(':')
 
   return (
     <Box
-      {...{ ...rest, layoutName }}
+      {...{ ...props, layoutName }}
       styles={(selector, theme) => `
         ${selector} {
           padding-bottom: calc(${Number(numerator)} / ${Number(
         denominator
-      )} * 100%);
+      )} * ${width});
           position: relative;
+        }
+
+        ${
+          overlay
+            ? `
+            ${selector}:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 100%;
+              background-image: ${overlay};
+            }
+          `
+            : ''
         }
   
         ${selector} > * {
@@ -50,6 +69,7 @@ export function Frame(props: Props) {
           height: 100%;
           object-fit: cover;
         }
+
         ${localStyles(selector, theme)}
       `}
     >

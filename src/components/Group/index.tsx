@@ -41,9 +41,7 @@ export function Group(props: Props) {
     <Box
       {...{ ...rest, layoutName }}
       styles={(selector, theme) => `
-        ${selector} {
-          overflow: hidden;
-        }
+        
   
         ${selector} > * {
           display: flex;

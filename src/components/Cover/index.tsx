@@ -16,24 +16,19 @@ export function Cover(props: Props) {
     height = '100vh',
     children,
     layoutName = 'cover',
+
     styles: localStyles = () => '',
-    ...rest
   } = props
 
   return (
     <Box
-      {...rest}
-      layoutName="cover"
+      {...{ ...props, layoutName }}
       styles={(selector, theme) => `
         ${selector} {       
           display: flex;
           flex-direction: column;
-          height: ${height};
-        }
-
-        ${selector} > * {
-          min-height: 100%;
-        }
+          min-height: ${height};
+        }       
         ${localStyles(selector, theme)}
       `}
     >

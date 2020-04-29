@@ -22,7 +22,6 @@ export function Grid(props: Props) {
     layoutName = 'grid',
     styles: localStyles = () => '',
     children,
-    ...rest
   } = props
 
   const { space } = useTheme()
@@ -31,7 +30,7 @@ export function Grid(props: Props) {
 
   const ref = useRef<HTMLElement>(null!)
   const childRef = useRef<HTMLDivElement>(null!)
-  const { width } = useResizeObserver({ ref })
+  const { width } = useResizeObserver(ref)
 
   let isWide = false
 
@@ -43,10 +42,11 @@ export function Grid(props: Props) {
 
   const containerClass = 'aboveMin'
 
-  const { className = '' } = rest
+  const { className = '' } = props
 
   const enhancedProps = {
-    ...rest,
+    ...props,
+    layoutName,
     ref,
     className: className.length
       ? isWide

@@ -27,7 +27,6 @@ export function Center(props: Props) {
     layoutName = 'center',
     styles: localStyles = () => '',
     children,
-    ...rest
   } = props
 
   const { space } = useTheme()
@@ -36,7 +35,7 @@ export function Center(props: Props) {
 
   return (
     <Box
-      {...{ ...rest, layoutName }}
+      {...{ ...props, layoutName }}
       styles={(selector, theme) => `
         ${selector} {
           box-sizing: content-box;

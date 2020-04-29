@@ -10,12 +10,11 @@ export function Breakout(props: BoxProps) {
     children,
     layoutName = 'breakout',
     styles: localStyles = () => '',
-    ...rest
   } = props
 
   return (
     <Box
-      {...{ ...rest, layoutName }}
+      {...{ ...props, layoutName }}
       styles={(selector, theme) => `
         ${selector} {
           width: 100vw;

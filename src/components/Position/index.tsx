@@ -14,8 +14,7 @@ type Props = BoxProps & {
   x?: 'left' | 'center' | 'right' | 'full'
   /** Positioning along y-axis */
   y?: 'top' | 'center' | 'bottom' | 'full'
-  /** HTML element to render */
-  as?: keyof JSX.IntrinsicElements
+  zIndex?: number
 }
 
 function generatePinningRules(x: string, y: string, margin: string) {
@@ -88,10 +87,10 @@ export function Position(props: Props) {
     fixed = false,
     x = 'center',
     y = 'center',
+    zIndex = 'auto',
     layoutName = 'position',
     styles: localStyles = () => '',
     children,
-    ...rest
   } = props
 
   const { space } = useTheme()
@@ -100,10 +99,11 @@ export function Position(props: Props) {
 
   return (
     <Box
-      {...{ ...rest, layoutName }}
+      {...{ ...props, layoutName }}
       styles={(selector, theme) => `
         ${selector} {
           position: absolute;
+          z-index: ${zIndex};
           ${generatePinningRules(x, y, gutterValue)}
           ${
             !breakout

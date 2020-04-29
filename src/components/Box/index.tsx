@@ -20,101 +20,33 @@ export type BoxProps = {
   paddingLeft?: number | string
   layoutName?: string
   stretch?: boolean
-  size?: string
+  width?: string
+  height?: string
+  maxWidth?: string
+  maxHeight?: string
+  basis?: string
+  grow?: number
+  shrink?: number
+  alignSelf?: 'start' | 'center' | 'end' | 'stretch'
+  /** Horizontal alignment */
+  justifySelf?:
+    | 'start'
+    | 'center'
+    | 'end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
   styles?: (selector?: string, theme?: Record<string, any>) => string
   children?: ReactNode
   /** HTML element to render */
   as?: any
-  ref?: any
   className?: string
 }
 
-function calculatePaddingValue(value: string | number | null): string {
+function calculateSpaceValue(value: string | number | null): string {
   const { space } = useTheme()
 
   return isNaN(Number(value)) ? value : space(value)
-}
-
-function maybeLookupColor(colorKey: string) {
-  const { colors } = useTheme()
-
-  const [name, variant] = colorKey.split('.')
-
-  if (colors[name] && typeof colors[name] === 'string') {
-    return colors[name]
-  }
-
-  if (colors[name] && colors[name][variant]) {
-    return colors[name][variant]
-  }
-
-  return colorKey
-}
-
-export function generateBoxRules(props: BoxProps) {
-  const {
-    bgColor = null,
-    fgColor = null,
-    padding = null,
-    paddingX = null,
-    paddingY = null,
-    paddingTop = null,
-    paddingRight = null,
-    paddingBottom = null,
-    paddingLeft = null,
-    stretch = false,
-    size = '',
-  } = props
-
-  const paddingValue = calculatePaddingValue(padding)
-  const paddingXValue = calculatePaddingValue(paddingX)
-  const paddingYValue = calculatePaddingValue(paddingY)
-  const paddingTopValue = calculatePaddingValue(paddingTop)
-  const paddingRightValue = calculatePaddingValue(paddingRight)
-  const paddingBottomValue = calculatePaddingValue(paddingBottom)
-  const paddingLeftValue = calculatePaddingValue(paddingLeft)
-
-  return `
-    position: relative;
-    ${fgColor ? `color: ${maybeLookupColor(fgColor)};` : ''}
-    ${bgColor ? `background-color: ${maybeLookupColor(bgColor)};` : ''}
-    ${padding ? `padding: ${paddingValue};` : ''}
-    ${
-      paddingX
-        ? `
-      padding-left: ${paddingXValue};
-      padding-right: ${paddingXValue};
-    `
-        : ''
-    }
-    ${
-      paddingY
-        ? `
-      padding-top: ${paddingYValue};
-      padding-bottom: ${paddingYValue};
-    `
-        : ''
-    }
-    ${paddingTop ? `padding-top: ${paddingTopValue};` : ''}
-    ${paddingRight ? `padding-right: ${paddingRightValue};` : ''}
-    ${paddingBottom ? `padding-bottom: ${paddingBottomValue};` : ''}
-    ${paddingLeft ? `padding-left: ${paddingLeftValue};` : ''}
-    ${
-      stretch
-        ? `
-      flex-grow: 999;
-      flex-basis: 0;
-    `
-        : ''
-    }
-    ${
-      size
-        ? `
-      flex-basis: ${size};
-    `
-        : ''
-    }
-  `
 }
 
 /**
@@ -123,8 +55,20 @@ export function generateBoxRules(props: BoxProps) {
 export const Box = React.forwardRef((props: BoxProps, ref) => {
   const {
     padding = null,
-    size = null,
+    paddingX = null,
+    paddingY = null,
+    paddingTop = null,
+    paddingRight = null,
+    paddingBottom = null,
+    paddingLeft = null,
     stretch = false,
+    width = null,
+    height = null,
+    maxWidth = null,
+    maxHeight = null,
+    basis = null,
+    grow = null,
+    shrink = null,
     as: Tag = 'div',
     styles = () => '',
     layoutName = 'box',
@@ -135,11 +79,103 @@ export const Box = React.forwardRef((props: BoxProps, ref) => {
   const layoutClass = createLayoutClassname(layoutName, props)
   const selector = `${Tag}.${layoutClass}`
 
+  const paddingValue = calculateSpaceValue(padding)
+  const paddingXValue = calculateSpaceValue(paddingX)
+  const paddingYValue = calculateSpaceValue(paddingY)
+  const paddingTopValue = calculateSpaceValue(paddingTop)
+  const paddingRightValue = calculateSpaceValue(paddingRight)
+  const paddingBottomValue = calculateSpaceValue(paddingBottom)
+  const paddingLeftValue = calculateSpaceValue(paddingLeft)
+
+  const widthValue = calculateSpaceValue(width)
+  const heightValue = calculateSpaceValue(height)
+  const maxWidthValue = calculateSpaceValue(maxWidth)
+  const maxHeightValue = calculateSpaceValue(maxHeight)
+
   return (
     <>
       {createStyleTag`
           ${selector} {
-            ${generateBoxRules(props)}
+            position: relative;
+            ${padding ? `padding: ${paddingValue};` : ''}
+            ${
+              paddingX
+                ? `
+              padding-left: ${paddingXValue};
+              padding-right: ${paddingXValue};
+            `
+                : ''
+            }
+            ${
+              paddingY
+                ? `
+              padding-top: ${paddingYValue};
+              padding-bottom: ${paddingYValue};
+            `
+                : ''
+            }
+            ${paddingTop ? `padding-top: ${paddingTopValue};` : ''}
+            ${paddingRight ? `padding-right: ${paddingRightValue};` : ''}
+            ${paddingBottom ? `padding-bottom: ${paddingBottomValue};` : ''}
+            ${paddingLeft ? `padding-left: ${paddingLeftValue};` : ''}
+            ${
+              stretch
+                ? `
+              flex-grow: 999;
+              flex-basis: 0;
+            `
+                : ''
+            }
+            ${
+              grow
+                ? `
+              flex-grow: ${grow};
+            `
+                : ''
+            }
+            ${
+              shrink
+                ? `
+              flex-shrink: ${shrink};
+            `
+                : ''
+            }
+            ${
+              basis
+                ? `
+              flex-basis: ${basis};
+            `
+                : ''
+            }
+            ${
+              width
+                ? `  
+              width: ${widthValue};
+            `
+                : ''
+            }
+            ${
+              height
+                ? `
+              height: ${heightValue};
+            `
+                : ''
+            }
+            ${
+              maxWidth
+                ? `  
+              max-width: ${maxWidthValue};
+            `
+                : ''
+            }
+            ${
+              maxHeight
+                ? `  
+              max-height: ${maxHeightValue};
+            `
+                : ''
+            }
+            
           }
           ${styles(selector, useTheme())}
         `}

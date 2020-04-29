@@ -1,7 +1,7 @@
-import { useEffect, useState, RefObject } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
+import { RefObject, useEffect, useState } from 'react'
 
-interface DOMRectReadOnly {
+type DOMRectReadOnly = {
   readonly bottom: number
   readonly height: number
   readonly left: number
@@ -12,42 +12,8 @@ interface DOMRectReadOnly {
   readonly y: number
 }
 
-/**
- * Hook parameters.
- */
-interface useResizeObserverProperties {
-  /**
-   * Ref object from `useRef`.
-   */
-  ref?: RefObject<Element> | null
-
-  /**
-   * DOM element. E.g. from `querySelector()`
-   */
-  element?: Element | null | undefined
-
-  /**
-   * Callback to fire when the observed component or Element
-   * resizes.
-   */
-  callback?: (entry: ResizeObserverEntry) => void
-}
-
-const IS_BROWSER = typeof window !== 'undefined'
-
-/**
- * Watch for the resizing of a React component or Element.
- *
- * @param hookProperties - Configuration optinos for the hook.
- *
- * @returns The `DOMRect` for the observed element.
- */
-const useResizeObserver = ({
-  ref,
-  element,
-  callback,
-}: useResizeObserverProperties) => {
-  const [sizes, setSizes] = useState<DOMRectReadOnly>({
+const useResizeObserver = (ref: RefObject<HTMLElement>, callback?: any) => {
+  const [dimensions, setDimensions] = useState<DOMRectReadOnly>({
     bottom: 0,
     height: 0,
     left: 0,
@@ -58,31 +24,23 @@ const useResizeObserver = ({
     y: 0,
   })
 
-  const handleResize = (entries: ResizeObserverEntry[]) => {
-    const [entry] = entries
-
-    if (callback) callback(entry)
-
-    setSizes(entry.contentRect)
-  }
-
-  const [resizeObs] = useState(() =>
-    IS_BROWSER ? new ResizeObserver(handleResize) : undefined
-  )
-
   useEffect(() => {
-    if (!resizeObs) return
-    let domNode
+    const resizeObserver = new ResizeObserver(entries => {
+      const [entry] = entries
+      if (callback) callback(entry.contentRect)
+      setDimensions(entry.contentRect)
+    })
 
-    if (ref) domNode = ref.current
-    else if (element) domNode = element
+    if (ref.current) {
+      resizeObserver.observe(ref.current)
+    }
 
-    if (domNode) resizeObs.observe(domNode)
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [ref])
 
-    return () => resizeObs.disconnect()
-  }, [ref, resizeObs, element])
-
-  return sizes
+  return dimensions
 }
 
 export default useResizeObserver
