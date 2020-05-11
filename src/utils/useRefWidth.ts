@@ -1,8 +1,7 @@
 import useResizeObserver from './useResizeObserver'
 import { useState, useEffect, useMemo } from 'react'
-console.log(require.resolve('react'))
 
-function debounce(func: any, wait: any = 50) {
+function debounce(func: any, wait: number = 50) {
   let timeout: any
   return [
     function(this: any, ...args: any[]) {
