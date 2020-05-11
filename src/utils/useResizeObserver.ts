@@ -1,46 +1,103 @@
-import ResizeObserver from 'resize-observer-polyfill'
-import { RefObject, useEffect, useState } from 'react'
+import { ResizeObserver } from '@juggle/resize-observer'
+import {
+  RefObject,
+  useEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  useMemo,
+} from 'react'
 
-type DOMRectReadOnly = {
-  readonly bottom: number
-  readonly height: number
-  readonly left: number
-  readonly right: number
-  readonly top: number
-  readonly width: number
-  readonly x: number
-  readonly y: number
+type ObservedSize = {
+  width: number
+  height: number
 }
 
-const useResizeObserver = (ref: RefObject<HTMLElement>, callback?: any) => {
-  const [dimensions, setDimensions] = useState<DOMRectReadOnly>({
-    bottom: 0,
-    height: 0,
-    left: 0,
-    right: 0,
-    top: 0,
+type ResizeHandler = (size: ObservedSize) => void
+
+function useResizeObserver(
+  opts: {
+    ref?: RefObject<HTMLElement>
+    onResize?: ResizeHandler
+  } = {}
+): { ref: RefObject<HTMLElement> } & ObservedSize {
+  const defaultRef = useRef<HTMLElement>(null)
+
+  const onResize = opts.onResize
+  const onResizeRef = useRef<ResizeHandler | undefined>(undefined)
+  onResizeRef.current = onResize
+
+  const resizeObserverRef = useRef<ResizeObserver>() as MutableRefObject<
+    ResizeObserver
+  >
+
+  const ref = defaultRef
+  const [size, setSize] = useState<ObservedSize>({
     width: 0,
-    x: 0,
-    y: 0,
+    height: 0,
+  })
+
+  const previous: {
+    current: ObservedSize
+  } = useRef({
+    width: 0,
+    height: 0,
   })
 
   useEffect(() => {
-    const resizeObserver = new ResizeObserver(entries => {
+    if (resizeObserverRef.current) return
+
+    resizeObserverRef.current = new ResizeObserver(entries => {
+      if (!Array.isArray(entries)) {
+        return
+      }
+
+      if (!entries.length) {
+        return
+      }
+
       const [entry] = entries
-      if (callback) callback(entry.contentRect)
-      setDimensions(entry.contentRect)
+
+      const [boxSize] = entry.borderBoxSize
+      const newWidth = Math.round(boxSize.inlineSize)
+      const newHeight = Math.round(boxSize.blockSize)
+      if (
+        previous.current.width !== newWidth ||
+        previous.current.height !== newHeight
+      ) {
+        const newSize = { width: newWidth, height: newHeight }
+        if (onResizeRef.current) {
+          onResizeRef.current(newSize)
+        } else {
+          previous.current.width = newWidth
+          previous.current.height = newHeight
+          setSize(newSize)
+        }
+      }
     })
+  }, [])
 
-    if (ref.current) {
-      resizeObserver.observe(ref.current)
+  useEffect(() => {
+    if (
+      typeof ref !== 'object' ||
+      ref === null ||
+      !(ref.current instanceof Element)
+    ) {
+      return
     }
 
-    return () => {
-      resizeObserver.disconnect()
-    }
+    const element = ref.current
+
+    resizeObserverRef.current.observe(element)
+
+    return () => resizeObserverRef.current.unobserve(element)
   }, [ref])
 
-  return dimensions
+  return useMemo(() => ({ ref, width: size.width, height: size.height }), [
+    ref,
+    size ? size.width : null,
+    size ? size.height : null,
+  ])
 }
 
 export default useResizeObserver
