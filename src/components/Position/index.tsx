@@ -1,9 +1,7 @@
 import React from 'react'
+import styled, { StyledProps } from '../../utils/styled'
 
-import useTheme from '../../utils/useTheme'
-import { Box, BoxProps } from '../Box'
-
-type Props = BoxProps & {
+type Props = StyledProps & {
   /** Space to offset from the edge of the containing element */
   gutter?: string | number
   /** Let the element flow outside of the containing element */
@@ -77,53 +75,27 @@ function generateYPinningRules(y: string, margin: string) {
     `
 }
 
-/**
- * Position layout component
- */
-export function Position(props: Props) {
-  const {
-    breakout = false,
-    gutter = '0px',
-    fixed = false,
-    x = 'center',
-    y = 'center',
-    zIndex = 'auto',
-    layoutName = 'position',
-    styles: localStyles = () => '',
-    children,
-  } = props
+const _Position = styled.div`
+  & {
+    position: absolute;
+    z-index: ${({ zIndex = 'auto' }) => zIndex};
+    ${({ x = 'center', y = 'center', gutter = '0px' }) =>
+      generatePinningRules(x, y, gutter)}
+    ${({ breakout = false, gutter = '0px' }) =>
+      !breakout
+        ? `
+      max-width: calc(100% - (${gutter} * 2));
+      max-height: calc(100% - (${gutter} * 2));
+      overflow: auto;`
+        : ''}
+    ${({ fixed = false }) =>
+      fixed
+        ? `
+      position: fixed;`
+        : ''}
+  }
+`
 
-  const { space } = useTheme()
-
-  const gutterValue: string = isNaN(Number(gutter)) ? gutter : space(gutter)
-
-  return (
-    <Box
-      {...{ ...props, layoutName }}
-      styles={(selector, theme) => `
-        ${selector} {
-          position: absolute;
-          z-index: ${zIndex};
-          ${generatePinningRules(x, y, gutterValue)}
-          ${
-            !breakout
-              ? `
-            max-width: calc(100% - (${gutterValue} * 2));
-            max-height: calc(100% - (${gutterValue} * 2));
-            overflow: auto;`
-              : ''
-          }
-          ${
-            fixed
-              ? `
-            position: fixed;`
-              : ''
-          }
-        }
-        ${localStyles(selector, theme)}
-      `}
-    >
-      {children}
-    </Box>
-  )
-}
+export const Position = (props: Props) => (
+  <_Position {...{ ...props, layoutName: 'breakout' }} />
+)

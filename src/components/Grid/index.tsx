@@ -1,36 +1,46 @@
-import React, { ReactNode, useRef } from 'react'
-
+import React, { useRef } from 'react'
 import useResizeObserver from '../../utils/useResizeObserver'
-import useTheme from '../../utils/useTheme'
-import { Box, BoxProps } from '../Box'
+import styled, { StyledProps } from '../../utils/styled'
 
-type Props = BoxProps & {
+type Props = StyledProps & {
   /** Minimum width of children */
   min?: string
   /** Space value used for gap between children */
   gap?: string | number
-  children?: ReactNode
 }
 
 /**
- * Grid layout component
+ * Breakout layout component
  */
-export function Grid(props: Props) {
-  const {
-    min = '250px',
-    gap = '0px',
-    layoutName = 'grid',
-    styles: localStyles = () => '',
-    children,
-  } = props
+const _Grid = styled.div`
+  & {
+    display: grid;
+    grid-gap: ${({ gap = '0px' }) => gap};
+    grid-template-columns: 100%;
+  }
 
-  const { space } = useTheme()
+  &.aboveMin {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(${({ min = '200px' }) => min}, 1fr)
+    );
+  }
 
-  const gapValue: string = isNaN(Number(gap)) ? gap : space(gap)
+  @supports (width: min(${({ min = '200px' }) => min}, 100%)) {
+    & {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(${({ min = '200px' }) => min}, 100%), 1fr)
+      );
+    }
+  }
+`
 
-  const ref = useRef<HTMLElement>(null!)
+export const Grid = (props: Props) => {
+  const { min = '200px' } = props
+
   const childRef = useRef<HTMLDivElement>(null!)
-  const { width } = useResizeObserver(ref)
+  const { ref, width } = useResizeObserver()
 
   let isWide = false
 
@@ -46,7 +56,7 @@ export function Grid(props: Props) {
 
   const enhancedProps = {
     ...props,
-    layoutName,
+    layoutName: 'grid',
     ref,
     className: className.length
       ? isWide
@@ -58,29 +68,9 @@ export function Grid(props: Props) {
   }
 
   return (
-    <Box
-      {...enhancedProps}
-      styles={(selector, theme) => `
-      ${selector} {
-        display: grid;
-        grid-gap: ${gapValue};
-        grid-template-columns: 100%;
-      }
-
-      ${selector}.aboveMin {
-        grid-template-columns: repeat(auto-fill, minmax(${min}, 1fr));
-      }
-
-      @supports (width: min(${min}, 100%)) {
-        ${selector} {
-          grid-template-columns: repeat(auto-fit, minmax(min(${min}, 100%), 1fr));
-        }
-      }
-      ${localStyles(selector, theme)}
-    `}
-    >
-      {children}
+    <_Grid {...enhancedProps}>
+      {props.children}
       <div ref={childRef} />
-    </Box>
+    </_Grid>
   )
 }

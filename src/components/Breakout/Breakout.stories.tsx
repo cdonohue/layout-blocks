@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Breakout } from '.'
-import { Box } from '../Box'
 import { Center } from '../Center'
 import { Stack } from '../Stack'
 
@@ -15,7 +14,7 @@ export default {
 export const Default = () => {
   return (
     <Center>
-      <Stack gap={4}>
+      <Stack gap="1rem">
         <p>
           Magna pharetra sit vulputate curabitur sed sem vehicula commodo
           convallis, pretium eros rhoncus elementum quam proin facilisi laoreet
@@ -29,7 +28,7 @@ export const Default = () => {
           a eget class tellus aptent dapibus rhoncus, convallis vivamus mattis
           cursus faucibus dis.
         </p>
-        <Breakout className="bg-green-600 text-white shadow-xl" padding={4}>
+        <Breakout className="bg-blue-600 border-blue-700 border-t-2 border-b-2 text-white shadow-2xl p-4">
           <Center>
             Iaculis platea magnis pulvinar ornare dui semper nisi nascetur
             congue efficitur quis, mollis vel malesuada vitae auctor interdum

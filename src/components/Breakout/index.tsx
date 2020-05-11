@@ -1,30 +1,17 @@
 import React from 'react'
-
-import { Box, BoxProps } from '../Box'
+import styled, { StyledProps } from '../../utils/styled'
 
 /**
  * Breakout layout component
  */
-export function Breakout(props: BoxProps) {
-  const {
-    children,
-    layoutName = 'breakout',
-    styles: localStyles = () => '',
-  } = props
+const _Breakout = styled.div`
+  & {
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+`
 
-  return (
-    <Box
-      {...{ ...props, layoutName }}
-      styles={(selector, theme) => `
-        ${selector} {
-          width: 100vw;
-          margin-left: 50%;
-          transform: translateX(-50%);
-        }
-        ${localStyles(selector, theme)}
-      `}
-    >
-      {children}
-    </Box>
-  )
-}
+export const Breakout = (props: StyledProps) => (
+  <_Breakout {...{ ...props, layoutName: 'breakout' }} />
+)

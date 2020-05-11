@@ -1,38 +1,19 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+import styled, { StyledProps } from '../../utils/styled'
 
-import { Box, BoxProps } from '../Box'
-
-type Props = BoxProps & {
+type Props = StyledProps & {
   /** Minimum height to cover */
   height?: string
-  children?: ReactNode
 }
 
-/**
- * Cover layout component
- */
-export function Cover(props: Props) {
-  const {
-    height = '100vh',
-    children,
-    layoutName = 'cover',
+const _Cover = styled.div`
+  & {
+    display: flex;
+    flex-direction: column;
+    min-height: ${({ height = '100vh' }) => height};
+  }
+`
 
-    styles: localStyles = () => '',
-  } = props
-
-  return (
-    <Box
-      {...{ ...props, layoutName }}
-      styles={(selector, theme) => `
-        ${selector} {       
-          display: flex;
-          flex-direction: column;
-          min-height: ${height};
-        }       
-        ${localStyles(selector, theme)}
-      `}
-    >
-      {children}
-    </Box>
-  )
-}
+export const Cover = (props: Props) => (
+  <_Cover {...{ ...props, layoutName: 'cover' }} />
+)
