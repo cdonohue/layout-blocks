@@ -15,7 +15,7 @@ export const Defaults = () => {
   return (
     <HStack>
       <div className="bg-gray-500 p-4">Hipster</div>
-      <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
+      <div className="bg-gray-600 p-8">Scandinavian Old Fashioned</div>
     </HStack>
   )
 }
@@ -24,7 +24,7 @@ export const AlignmentTop = () => {
   return (
     <HStack alignment="top">
       <div className="bg-gray-500 p-4">Hipster</div>
-      <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
+      <div className="bg-gray-600 p-8">Scandinavian Old Fashioned</div>
     </HStack>
   )
 }
@@ -33,7 +33,7 @@ export const AlignmentCenter = () => {
   return (
     <HStack alignment="center">
       <div className="bg-gray-500 p-4">Hipster</div>
-      <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
+      <div className="bg-gray-600 p-8">Scandinavian Old Fashioned</div>
     </HStack>
   )
 }
@@ -42,7 +42,7 @@ export const AlignmentBottom = () => {
   return (
     <HStack alignment="bottom">
       <div className="bg-gray-500 p-4">Hipster</div>
-      <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
+      <div className="bg-gray-600 p-8">Scandinavian Old Fashioned</div>
     </HStack>
   )
 }
