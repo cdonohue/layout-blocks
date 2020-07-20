@@ -102,10 +102,10 @@ export const WithScreenAndSpacerBottom = () => {
     <Screen className="bg-gray-200">
       <VStack>
         <div className="bg-gray-500 p-4">Exquisite Scandinavian</div>
-        <Spacer />
         <div className="bg-gray-600 p-4">
           Quality of life tote bag espresso wardrobe
         </div>
+        <Spacer />
       </VStack>
     </Screen>
   )
