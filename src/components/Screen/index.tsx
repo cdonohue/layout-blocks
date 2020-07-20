@@ -6,12 +6,17 @@ import { LayoutProps } from '../../types'
 
 type Props = LayoutProps
 
-export const Spacer = forwardRef((props: Props, ref: any) => {
-  const { as: Tag = 'div', layoutName = 'spacer', children, ...rest } = props
+export const Screen = forwardRef((props: Props, ref: any) => {
+  const { as: Tag = 'div', layoutName = 'screen', children, ...rest } = props
 
   const styles = `
     & {
-      flex-grow: 999;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   `
 
