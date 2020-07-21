@@ -1,8 +1,23 @@
 import React from 'react'
 
 import { HStack } from '.'
+import { VStack } from '../VStack'
 import { Spacer } from '../Spacer'
 import { Screen } from '../Screen'
+import {
+  Maximize,
+  DollarSign,
+  BarChart2,
+  Clock,
+  CreditCard,
+  Delete,
+  Activity,
+  Command,
+  Monitor,
+  HardDrive,
+  LifeBuoy,
+  Settings,
+} from 'react-feather'
 
 export default {
   component: HStack,
@@ -20,7 +35,7 @@ export const Defaults = () => {
   )
 }
 
-export const AlignmentTop = () => {
+export const AlignmentYTop = () => {
   return (
     <HStack alignment="top">
       <div className="bg-gray-500 p-4">Hipster</div>
@@ -29,7 +44,7 @@ export const AlignmentTop = () => {
   )
 }
 
-export const AlignmentCenter = () => {
+export const AlignmentYCenter = () => {
   return (
     <HStack alignment="center">
       <div className="bg-gray-500 p-4">Hipster</div>
@@ -38,7 +53,7 @@ export const AlignmentCenter = () => {
   )
 }
 
-export const AlignmentBottom = () => {
+export const AlignmentYBottom = () => {
   return (
     <HStack alignment="bottom">
       <div className="bg-gray-500 p-4">Hipster</div>
@@ -61,7 +76,7 @@ export const WithScreen = () => {
 export const WithScreenAndSpacerLeft = () => {
   return (
     <Screen className="bg-gray-200">
-      <HStack>
+      <HStack className="w-full">
         <Spacer />
         <div className="bg-gray-500 p-4">Hipster</div>
         <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
@@ -73,7 +88,7 @@ export const WithScreenAndSpacerLeft = () => {
 export const WithScreenAndSpacerBetween = () => {
   return (
     <Screen className="bg-gray-200">
-      <HStack>
+      <HStack className="w-full">
         <div className="bg-gray-500 p-4">Hipster</div>
         <Spacer />
         <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
@@ -85,7 +100,7 @@ export const WithScreenAndSpacerBetween = () => {
 export const WithScreenAndSpacerRight = () => {
   return (
     <Screen className="bg-gray-200">
-      <HStack>
+      <HStack className="w-full">
         <div className="bg-gray-500 p-4">Hipster</div>
         <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
         <Spacer />

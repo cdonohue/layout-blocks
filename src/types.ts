@@ -6,4 +6,5 @@ export type LayoutProps = {
   as?: any
   className?: string
   layoutName?: string
+  style?: any
 }

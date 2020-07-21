@@ -72,7 +72,7 @@ export const WithScreen = () => {
 export const WithScreenAndSpacerTop = () => {
   return (
     <Screen className="bg-gray-200">
-      <VStack>
+      <VStack className="h-full">
         <Spacer />
         <div className="bg-gray-500 p-4">Exquisite Scandinavian</div>
         <div className="bg-gray-600 p-4">
@@ -86,7 +86,7 @@ export const WithScreenAndSpacerTop = () => {
 export const WithScreenAndSpacerBetween = () => {
   return (
     <Screen className="bg-gray-200">
-      <VStack>
+      <VStack className="h-full">
         <div className="bg-gray-500 p-4">Exquisite Scandinavian</div>
         <Spacer />
         <div className="bg-gray-600 p-4">
@@ -100,7 +100,7 @@ export const WithScreenAndSpacerBetween = () => {
 export const WithScreenAndSpacerBottom = () => {
   return (
     <Screen className="bg-gray-200">
-      <VStack>
+      <VStack className="h-full">
         <div className="bg-gray-500 p-4">Exquisite Scandinavian</div>
         <div className="bg-gray-600 p-4">
           Quality of life tote bag espresso wardrobe
