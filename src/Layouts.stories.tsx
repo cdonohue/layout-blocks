@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { HStack, VStack, Spacer, Screen } from '.'
+import { HStack, VStack, Spacer, Screen, Tiles, Flex } from '.'
 
 import {
   Maximize,
@@ -42,37 +42,38 @@ export const CashApp = () => {
         <span>$0</span>
       </HStack>
       <Spacer />
-      <VStack className="text-2xl">
-        <HStack>
-          <button className="w-20 h-20">1</button>
-          <button className="w-20 h-20">2</button>
-          <button className="w-20 h-20">3</button>
-        </HStack>
-        <HStack>
-          <button className="w-20 h-20">4</button>
-          <button className="w-20 h-20">5</button>
-          <button className="w-20 h-20">6</button>
-        </HStack>
-        <HStack>
-          <button className="w-20 h-20">7</button>
-          <button className="w-20 h-20">8</button>
-          <button className="w-20 h-20">9</button>
-        </HStack>
-        <HStack>
-          <button className="w-20 h-20">.</button>
-          <button className="w-20 h-20">0</button>
-          <button className="w-20 h-20">
-            <Delete className="m-auto" />
-          </button>
-        </HStack>
-      </VStack>
+      <Tiles className="text-2xl px-8" min="30%">
+        <button className="p-8">1</button>
+        <button className="p-8">2</button>
+        <button className="p-8">3</button>
+
+        <button className="p-8">4</button>
+        <button className="p-8">5</button>
+        <button className="p-8">6</button>
+
+        <button className="p-8">7</button>
+        <button className="p-8">8</button>
+        <button className="p-8">9</button>
+
+        <button className="p-8">.</button>
+        <button className="p-8">0</button>
+        <button className="p-8">
+          <Delete className="m-auto" />
+        </button>
+      </Tiles>
       <HStack alignment="center" className="space-x-4 p-4 text-xl w-full">
-        <button className="bg-green-500 px-6 py-2 rounded-full shadow-md flex-1">
+        <Flex
+          as="button"
+          className="bg-green-500 px-6 py-2 rounded-full shadow-md"
+        >
           Request
-        </button>
-        <button className="bg-green-500 px-6 py-2 rounded-full shadow-md flex-1">
+        </Flex>
+        <Flex
+          as="button"
+          className="bg-green-500 px-6 py-2 rounded-full shadow-md"
+        >
           Pay
-        </button>
+        </Flex>
       </HStack>
       <HStack alignment="center" className="p-4 pt-0 w-full">
         <button className="p-4 text-lg text-green-300">
@@ -148,7 +149,7 @@ export const AboutThisMac = () => {
             <button className="w-3 h-3 rounded-full bg-green-500"></button>
             <Spacer />
           </HStack>
-          <VStack className="p-4 flex-1 text-sm" alignment="leading">
+          <VStack className="p-4 text-sm" alignment="leading">
             <NavItem label="Overview" Icon={Command} isSelected />
             <NavItem label="Displays" Icon={Monitor} />
             <NavItem label="Storage" Icon={HardDrive} />
@@ -157,9 +158,9 @@ export const AboutThisMac = () => {
             <Spacer />
           </VStack>
         </VStack>
-        <VStack className="flex-1 bg-gray-200">
+        <VStack className="bg-gray-200">
           <header className="p-4 bg-white text-lg">Overview</header>
-          <VStack className="flex-1 p-16 space-y-4 text-sm overflow-scroll">
+          <VStack className="p-16 space-y-4 text-sm overflow-scroll">
             <VStack className="space-y-1">
               <Command className="w-16 h-16 text-indigo-600" />
               <h2 className="text-2xl">macOS Big Sur</h2>
@@ -204,12 +205,12 @@ export const SimpleModal = () => {
   return (
     <Screen className="bg-gray-800">
       <VStack className="bg-gray-100 rounded-lg overflow-hidden w-1/2 shadow-2xl">
-        <HStack className="p-4" alignment="center">
+        <HStack className="border-b p-4" alignment="center">
           <h3 className="font-bold">Some Title</h3>
           <Spacer />
           <X className="w-4 h-4" />
         </HStack>
-        <p className="px-4">
+        <p className="px-4 pt-4">
           Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
           dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
           consectetur ac, vestibulum at eros.
@@ -225,4 +226,8 @@ export const SimpleModal = () => {
       </VStack>
     </Screen>
   )
+}
+
+export const Playstation4UI = () => {
+  return <Screen className="bg-blue-600"></Screen>
 }

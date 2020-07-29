@@ -8,175 +8,78 @@ npm i layout-blocks
 
 ## Components
 
-### `Box`
+All layout components support an `as` prop to define the html element you want the block to render as (defaults to `div`).
 
-Pad all sides (or none at all)
+### `VStack`
+
+Renders children in a vertical stack with a prop to control horizontal alignment.
 
 ```
-import { Box } from 'layout-blocks'
+import { VStack } from 'layout-blocks'
 ```
 
-| prop    | type   | description                 | default     |
-| ------- | ------ | --------------------------- | ----------- |
-| padding | string | `padding` value for content | `var(--s1)` |
-| as      | string | HTML element to render      | `div`       |
+| prop      | values                                  | description                                   | default   |
+| --------- | --------------------------------------- | --------------------------------------------- | --------- |
+| alignment | `leading` `center` `trailing` `stretch` | Controls the horizontal alignment of children | `stretch` |
+
+### `Screen`
+
+A special opinionated version of a vertical stack that assumes height and width of the viewport and also centers content both horizontally and vertically.
+
+```
+import { Screen } from 'layout-blocks'
+```
+
+### `HStack`
+
+Renders children in a horizontal stack with a prop to control vertical alignment.
+
+```
+import { HStack } from 'layout-blocks'
+```
+
+| prop      | values                            | description                                 | default   |
+| --------- | --------------------------------- | ------------------------------------------- | --------- |
+| alignment | `top` `center` `bottom` `stretch` | Controls the vertical alignment of children | `stretch` |
+
+### `Flex`
+
+Useful for controlling how much space an item takes up within a `HStack`, `VStack`, or `Screen`. Think of this as an abstraction over `flex` properties. Use it to control growing, shrinking, and initial size.
+
+```
+import { Flex } from 'layout-blocks'
+```
+
+| prop   | value  | description                          | default |
+| ------ | ------ | ------------------------------------ | ------- |
+| grow   | string | Specifies the `flex-grow` property   | `1`     |
+| shrink | string | Specifies the `flex-shrink` property | `1`     |
+| basis  | string | Specifies the `flex-basis` property  | `0%`    |
+
+### `Spacer`
+
+Shorthand for `<Flex />` with no props. Useful to insert space within stacks to push surrounding content away.
+
+```
+import { Spacer } from 'layout-blocks'
+```
 
 ### `Breakout`
 
-Break out of a containing element
+Useful when you have a restricting container (maybe in width) and you need an element to stretch to the width of the viewport without flowing the element outside of the container (like a callout section).
 
 ```
 import { Breakout } from 'layout-blocks'
 ```
 
-| prop | type   | description            | default |
-| ---- | ------ | ---------------------- | ------- |
-| as   | string | HTML element to render | `div`   |
+### `Tiles`
 
-### `Center`
-
-Center content horizontally
+Renders children in a grid with a prop to control the minimum width before rendering each child in a row of it's own.
 
 ```
-import { Center } from 'layout-blocks'
+import { Tiles } from 'layout-blocks'
 ```
 
-| prop       | type    | description                            | default          |
-| ---------- | ------- | -------------------------------------- | ---------------- |
-| max        | string  | Maximum width to limit content         | `var(--measure)` |
-| centerText | boolean | Also center the text within            | `false`          |
-| gutter     | string  | Space on each side of the content      | `0`              |
-| intrinsic  | boolean | Center children based on content width | `false`          |
-| as         | string  | HTML element to render                 | `div`            |
-
-### `Container`
-
-Contain children (enforces `relative` positioning)
-
-```
-import { Container } from 'layout-blocks'
-```
-
-| prop | type   | description            | default |
-| ---- | ------ | ---------------------- | ------- |
-| as   | string | HTML element to render | `div`   |
-
-### `Cover`
-
-"Cover" a height and vertically center the content within (like Hero elements)
-
-```
-import { Cover } from 'layout-blocks'
-```
-
-| prop          | type    | description                                                                              | default     |
-| ------------- | ------- | ---------------------------------------------------------------------------------------- | ----------- |
-| centeredIndex | number  | 1-based index of what child to center vertically (has no effect when there is one child) | `2`         |
-| space         | string  | Spacing between child elements                                                           | `var(--s1)` |
-| minHeight     | string  | Minimum height to cover                                                                  | `100vh`     |
-| isPadded      | boolean | Also use the `space` value to pad the container                                          | `false`     |
-| as            | string  | HTML element to render                                                                   | `div`       |
-
-### `Frame`
-
-Properly crop an image/video to an aspect ratio
-
-```
-import { Frame } from 'layout-blocks'
-```
-
-| prop  | type   | description                                  | default |
-| ----- | ------ | -------------------------------------------- | ------- |
-| ratio | string | Aspect ratio of element (`[width]:[height]`) | `16:9`  |
-| as    | string | HTML element to render                       | `div`   |
-
-### `Grid`
-
-Display a grid of items with a minimum width
-
-```
-import { Grid } from 'layout-blocks'
-```
-
-| prop  | type   | description                               | default     |
-| ----- | ------ | ----------------------------------------- | ----------- |
-| min   | string | Minimum width of children                 | `250px`     |
-| space | string | Space value used for gap between children | `var(--s1)` |
-| as    | string | HTML element to render                    | `div`       |
-
-### `Group`
-
-Show an overflowing group of things horizontally, each with maybe a different width
-
-```
-import { Group } from 'layout-blocks'
-```
-
-| prop    | type   | description                                                                                      | default     |
-| ------- | ------ | ------------------------------------------------------------------------------------------------ | ----------- |
-| align   | string | Vertical alignment (`start`, `center`, `end`, `stretch`)                                         | `center`    |
-| justify | string | Horizontal alignment (`start`, `center`, `end`, `space-between`, `space-around`, `space-evenly`) | `start`     |
-| space   | string | Space value used for gap between children                                                        | `var(--s1)` |
-| as      | string | HTML element to render                                                                           | `div`       |
-
-### `Position`
-
-Position content outside of it's normal flow
-
-```
-import { Position } from 'layout-blocks'
-```
-
-| prop   | type    | description                                                   | default     |
-| ------ | ------- | ------------------------------------------------------------- | ----------- |
-| margin | string  | Space to offset from the edge of the containing element       | `var(--s1)` |
-| fixed  | boolean | Contain the element to the viewport (instead of the document) | `false`     |
-| x      | string  | Positioning along x-axis (`left`, `center`, `right`, `full`)  | `center`    |
-| y      | string  | Positioning along y-axis (`top`, `center`, `bottom`, `full`)  | `center`    |
-| as     | string  | HTML element to render                                        | `div`       |
-
-### `Sidebar`
-
-Show a sidebar/content horizontal layout that stacks vertically at a certain threshold
-
-```
-import { Sidebar } from 'layout-blocks'
-```
-
-| prop       | type    | description                                                                                                                                     | default |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| side       | string  | Side to treat as the sidebar                                                                                                                    | `left`  |
-| sideWidth  | string  | Width value to limit the sidebar to in horizontal mode                                                                                          | `false` |
-| contentMin | string  | Percentage value to use as the breakpoint for the element opposite the sidebar (going under this percentage switches over to a vertical layout) | `50%`   |
-| space      | string  | Space between elements (sidebar and content)                                                                                                    | `0`     |
-| stretch    | boolean | Stretch sidebar to match content (and vice versa)                                                                                               | `false` |
-| as         | string  | HTML element to render                                                                                                                          | `div`   |
-
-### `Stack`
-
-Vertically position a list of things (with optional spacing)
-
-```
-import { Stack } from 'layout-blocks'
-```
-
-| prop      | type    | description                                   | default     |
-| --------- | ------- | --------------------------------------------- | ----------- |
-| space     | string  | Vertical space between child elements         | `var(--s1)` |
-| recursive | boolean | Recursively apply spacing (for nested stacks) | `false`     |
-| as        | string  | HTML element to render                        | `div`       |
-
-### `Switcher`
-
-Show a list of things horizontally, then stack when a container thershold is met
-
-```
-import { Switcher } from 'layout-blocks'
-```
-
-| prop      | type   | description                                    | default          |
-| --------- | ------ | ---------------------------------------------- | ---------------- |
-| threshold | string | Breakpoint to layout items in a vertical stack | `var(--measure)` |
-| space     | string | Space value used for the gap between children  | `var(--s1)`      |
-| limit     | number | Number of items to limit to one row            | `4`              |
-| as        | string | HTML element to render                         | `div`            |
+| prop | value  | description                                                  | default |
+| ---- | ------ | ------------------------------------------------------------ | ------- |
+| min  | string | Minimum width of child before collapsing to one item per row | `250px` |

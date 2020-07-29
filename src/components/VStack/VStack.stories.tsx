@@ -15,7 +15,6 @@ export const Defaults = () => {
   return (
     <VStack>
       <div className="bg-gray-500 p-4">Exquisite Scandinavian</div>
-
       <div className="bg-gray-600 p-4">
         Quality of life tote bag espresso wardrobe
       </div>

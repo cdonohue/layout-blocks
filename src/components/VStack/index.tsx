@@ -32,7 +32,7 @@ export const VStack = forwardRef((props: Props, ref: any) => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: translateToFlex(alignment),
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     ...userStyles,
   }
 

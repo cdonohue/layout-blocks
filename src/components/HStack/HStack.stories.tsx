@@ -1,23 +1,9 @@
 import React from 'react'
 
 import { HStack } from '.'
-import { VStack } from '../VStack'
 import { Spacer } from '../Spacer'
+import { Flex } from '../Flex'
 import { Screen } from '../Screen'
-import {
-  Maximize,
-  DollarSign,
-  BarChart2,
-  Clock,
-  CreditCard,
-  Delete,
-  Activity,
-  Command,
-  Monitor,
-  HardDrive,
-  LifeBuoy,
-  Settings,
-} from 'react-feather'
 
 export default {
   component: HStack,
@@ -65,7 +51,7 @@ export const AlignmentYBottom = () => {
 export const WithScreen = () => {
   return (
     <Screen className="bg-gray-200">
-      <HStack>
+      <HStack className="w-full">
         <div className="bg-gray-500 p-4">Hipster</div>
         <div className="bg-gray-600 p-4">Scandinavian Old Fashioned</div>
       </HStack>

@@ -5,6 +5,5 @@ export type LayoutProps = {
   /** HTML element to render */
   as?: any
   className?: string
-  layoutName?: string
   style?: any
 }
