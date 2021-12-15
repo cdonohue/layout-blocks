@@ -29,6 +29,7 @@
   ],
   "module": "dist/layout-blocks.esm.js",
   "devDependencies": {
+    "auto-changelog": "^2.3.0",
     "css-tree": "^2.0.3",
     "esbuild": "^0.14.5",
     "esbuild-css-modules-plugin": "^2.0.9",
