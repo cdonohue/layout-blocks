@@ -1,0 +1,17 @@
+.zstack {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'zstack';
+  justify-items: var(--layout-zstack-justify);
+  align-items: var(--layout-zstack-align);
+}
+
+.zstack > * {
+  grid-area: zstack;
+  z-index: var(--layout-zstack-zIndex);
+  margin-top: calc(var(--layout-zstack-marginTop) * var(--layout-zstack-layer));
+  margin-right: calc(var(--layout-zstack-marginRight) * var(--layout-zstack-layer));
+  margin-bottom: calc(var(--layout-zstack-marginBottom) * var(--layout-zstack-layer));
+  margin-left: calc(var(--layout-zstack-marginLeft) * var(--layout-zstack-layer));
+}

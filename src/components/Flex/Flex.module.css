@@ -1,0 +1,6 @@
+.flex {
+  align-items: var(--layout-flex-align, 'center');
+  display: flex;
+  flex-direction: var(--layout-flex-direction, 'row');
+  justify-content: var(--layout-flex-justify, 'center');
+}

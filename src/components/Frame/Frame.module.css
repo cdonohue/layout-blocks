@@ -1,0 +1,41 @@
+.frame {
+  position: relative;
+  width: 100%;
+}
+
+.frame > * {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frame > img,
+.frame > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@supports (
+  aspect-ratio: var(--layout-frame-ratio-width) / var(--layout-frame-ratio-height)
+) {
+  .frame {
+    aspect-ratio: var(--layout-frame-ratio-width) / var(--layout-frame-ratio-height);
+  }
+}
+
+@supports not (
+  aspect-ratio: var(--layout-frame-ratio-width) / var(--layout-frame-ratio-height)
+) {
+  .frame {
+    padding-bottom: calc(
+      var(--layout-frame-ratio-height) / var(--layout-frame-ratio-width) * 100%
+    );
+  }
+}

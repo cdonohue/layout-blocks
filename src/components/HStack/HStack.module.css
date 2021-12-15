@@ -1,0 +1,12 @@
+.hstack {
+  height: 100%;
+}
+
+.hstack > * {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.hstack > * + * {
+  margin-left: var(--layout-hstack-spacing, 0);
+}

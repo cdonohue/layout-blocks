@@ -2,29 +2,16 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "version": "auto-changelog -p --template keepachangelog && git add CHANGELOG.md",
-    "prepublish": "tsdx build",
-    "prepublishOnly": "git push && git push --tags && gh-release"
+    "version": "auto-changelog -p --template keepachangelog && git add CHANGELOG.md"
   },
   "peerDependencies": {
     "react": ">=16.8"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "prettier": {
     "printWidth": 80,
@@ -53,6 +40,9 @@
     "@types/react-dom": "^16.9.5",
     "auto-changelog": "^2.2.0",
     "babel-loader": "^8.0.6",
+    "css-tree": "^2.0.3",
+    "esbuild": "^0.14.5",
+    "esbuild-css-modules-plugin": "^2.0.9",
     "gh-release": "^3.5.0",
     "husky": "^4.2.3",
     "postcss-import": "^12.0.1",

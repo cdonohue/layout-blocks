@@ -1,0 +1,16 @@
+.view {
+  box-sizing: border-box;
+  padding-block-start: var(--layout-padding-top, 0);
+  padding-inline-end: var(--layout-padding-right, 0);
+  padding-block-end: var(--layout-padding-bottom, 0);
+  padding-inline-start: var(--layout-padding-left, 0);
+}
+
+@supports not (padding-block: var(--layout-padding-top, 0)) {
+  .view {
+    padding-top: var(--layout-padding-top, 0);
+    padding-right: var(--layout-padding-right, 0);
+    padding-bottom: var(--layout-padding-bottom, 0);
+    padding-left: var(--layout-padding-left, 0);
+  }
+}

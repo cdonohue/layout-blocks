@@ -1,0 +1,12 @@
+.vstack {
+  height: 100%;
+}
+
+.vstack > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.vstack > * + * {
+  margin-top: var(--layout-vstack-spacing, 0);
+}
