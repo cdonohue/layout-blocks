@@ -4,6 +4,10 @@
   padding-inline-end: var(--layout-padding-right, 0);
   padding-block-end: var(--layout-padding-bottom, 0);
   padding-inline-start: var(--layout-padding-left, 0);
+  border: var(--layout-border-width) var(--layout-border-style)
+    var(--layout-border-color);
+  border-radius: var(layout-border-radius);
+  box-shadow: var(layout-shadow);
 }
 
 @supports not (padding-block: var(--layout-padding-top, 0)) {

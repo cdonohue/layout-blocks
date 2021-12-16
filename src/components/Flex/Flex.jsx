@@ -36,8 +36,6 @@ export const Flex = React.forwardRef(
       '--layout-flex-justify': justify,
     }
 
-    console.log(className)
-
     const sharedProps = {
       ...props,
       ref,

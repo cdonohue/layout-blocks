@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Cluster } from './Cluster'
+import { Cluster } from '../../../dist'
 
 export default {
   title: 'Layout/Cluster',
@@ -8,7 +8,7 @@ export default {
   argTypes: {},
 }
 
-const Template = (args) => (
+const Template = args => (
   <Cluster {...args}>
     <div
       style={{
@@ -51,7 +51,7 @@ const Link = ({ children }) => (
   </a>
 )
 
-const NavbarExample = (args) => (
+const NavbarExample = args => (
   <Cluster justify="space-between">
     <div
       style={{

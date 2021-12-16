@@ -1,10 +1,4 @@
-import React from 'react'
-import { useControls } from 'leva'
-
-import { ZStack } from './ZStack'
-import View from '../View'
-import HStack from '../HStack'
-import Spacer from '../Spacer'
+import { ZStack, View, HStack } from '../../../dist'
 
 export default {
   title: 'Layout/ZStack',
@@ -14,31 +8,7 @@ export default {
 
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
 
-const Template = (args) => {
-  const { initialSize, sizeMultiplier, numberOfItems, ...props } = useControls({
-    reverse: false,
-    alignment: 'center',
-    offset: '0px',
-    numberOfItems: {
-      value: 4,
-      min: 1,
-      max: 20,
-      step: 1,
-    },
-  })
-
-  return (
-    <HStack width="100%" alignment="top">
-      <ZStack {...props}>
-        {[...Array(numberOfItems).keys()].map((_, i) => (
-          <View style={{ border: '1px solid rgba(0,0,0,.2)' }} />
-        ))}
-      </ZStack>
-    </HStack>
-  )
-}
-
-const CaptionTemplate = (args) => {
+const CaptionTemplate = args => {
   return (
     <ZStack alignment="bottomLeading" offset="1rem">
       <View
@@ -60,9 +30,6 @@ const CaptionTemplate = (args) => {
     </ZStack>
   )
 }
-
-export const Default = Template.bind({})
-Default.args = {}
 
 export const Caption = CaptionTemplate.bind({})
 Caption.args = {}

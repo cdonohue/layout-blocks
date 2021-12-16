@@ -1,20 +1,13 @@
 import React from 'react'
 
-import { Flex, supportedValues } from './Flex'
+import { Flex } from '../../../dist'
 
 export default {
   title: 'Layout/Flex',
   component: Flex,
-  argTypes: Object.entries(supportedValues).reduce((memo, [key, options]) => {
-    memo[key] = {
-      options,
-    }
-
-    return memo
-  }, {}),
 }
 
-const Template = (args) => (
+const Template = args => (
   <Flex {...args}>
     <div>One</div>
     <div>Two</div>

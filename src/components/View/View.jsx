@@ -14,6 +14,11 @@ export const View = React.forwardRef(
       paddingRight = '0',
       paddingBottom = '0',
       paddingLeft = '0',
+      borderRadius = '0',
+      borderColor = 'black',
+      borderStyle = 'solid',
+      borderWidth = '0',
+      shadow = 'none',
       style: passedInStyles,
       ...props
     },
@@ -42,6 +47,11 @@ export const View = React.forwardRef(
       '--layout-padding-right': paddingRight,
       '--layout-padding-bottom': paddingBottom,
       '--layout-padding-left': paddingLeft,
+      '--layout-border-radius': borderRadius,
+      '--layout-border-color': borderColor,
+      '--layout-border-style': borderStyle,
+      '--layout-border-width': borderWidth,
+      '--layout-shadow': shadow,
     }
 
     const sharedProps = {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View } from './View'
+import { View } from '../../../dist'
 
 export default {
   title: 'Layout/View',
@@ -14,7 +14,7 @@ export default {
   },
 }
 
-const Template = (args) => <View {...args}>Some text</View>
+const Template = args => <View {...args}>Some text</View>
 
 export const Default = Template.bind({})
 export const WidthAndHeight = Template.bind({})

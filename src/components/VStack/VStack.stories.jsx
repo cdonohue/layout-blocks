@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { VStack, supportedValues } from './VStack'
-import View from '../View'
-import Frame from '../Frame'
+import { VStack, View, Frame } from '../../../dist'
 
 export default {
   title: 'Layout/VStack',
@@ -16,22 +14,21 @@ export default {
   }, {}),
 }
 
-const Template = (args) => (
-  <VStack padding="24px" {...args}>
-    <View padding="12px">One</View>
-    <View padding="12px">A lot of text to show</View>
-    <View padding="12px">
-      Slow-carb copper mug sartorial put a bird on it single-origin coffee
-      austin pork belly etsy shoreditch tousled seitan. Waistcoat art party man
-      bun intelligentsia banjo. Cold-pressed plaid hella leggings snackwave DIY
-      echo park man braid synth palo santo tilde. Brunch literally green juice
-      +1. Try-hard vexillologist etsy enamel pin.
-    </View>
-    <View padding="12px">Four</View>
+const Template = args => (
+  <VStack
+    spacing="var(--size-3)"
+    padding="var(--size-3)"
+    borderWidth="var(--border-size-2)"
+    {...args}
+  >
+    <View padding="var(--size-3)" borderWidth="var(--border-size-2)" />
+    <View padding="var(--size-3)" borderWidth="var(--border-size-2)" />
+    <View padding="var(--size-3)" borderWidth="var(--border-size-2)" />
+    <View padding="var(--size-3)" borderWidth="var(--border-size-2)" />
   </VStack>
 )
 
-const Card = (args) => (
+const Card = args => (
   <VStack alignment="leading" padding="24px" {...args}>
     <h2>Card Heading</h2>
     <Frame>

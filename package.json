@@ -29,12 +29,24 @@
   ],
   "module": "dist/layout-blocks.esm.js",
   "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-docs": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/react": "^6.4.9",
     "auto-changelog": "^2.3.0",
+    "babel-loader": "^8.2.3",
     "css-tree": "^2.0.3",
     "esbuild": "^0.14.5",
     "esbuild-css-modules-plugin": "^2.0.9",
-    "np": "^7.6.0"
+    "np": "^7.6.0",
+    "open-props": "^1.0.13",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "storybook-css-modules-preset": "^1.1.1"
   },
   "description": "Reusable layout components for your React project",
-  "repository": "https://github.com/cdonohue/layout-blocks.git"
+  "repository": "https://github.com/cdonohue/layout-blocks.git",
+  "dependencies": {}
 }

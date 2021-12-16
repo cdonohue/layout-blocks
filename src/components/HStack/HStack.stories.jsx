@@ -1,7 +1,6 @@
 import React from 'react'
-import { gray } from '@radix-ui/colors'
 
-import { HStack, supportedValues } from './HStack'
+import { HStack } from '../../../dist'
 import View from '../View'
 
 export default {
@@ -16,7 +15,7 @@ export default {
   }, {}),
 }
 
-const Template = (args) => (
+const Template = args => (
   <HStack padding="24px" backgroundColor={gray.gray2} {...args}>
     <View padding="12px" backgroundColor={gray.gray5}>
       One
